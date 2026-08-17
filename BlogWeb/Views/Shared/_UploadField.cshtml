@@ -1,0 +1,23 @@
+@*
+    Reusable upload widget — ported from UploadField.tsx.
+    Model: (string Name, string Folder, string? DefaultUrl, string Kind) — Kind is "image" or "file".
+*@
+@model (string Name, string Folder, string? DefaultUrl, string Kind)
+@{
+    var hasUrl = !string.IsNullOrEmpty(Model.DefaultUrl);
+}
+<div class="js-upload-field" data-folder="@Model.Folder" data-kind="@Model.Kind">
+    <input type="hidden" name="@Model.Name" value="@Model.DefaultUrl" class="js-upload-hidden" />
+
+    @if (Model.Kind == "image")
+    {
+        <img class="js-upload-preview mb-2 rounded" src="@Model.DefaultUrl" style="width:5rem;height:5rem;object-fit:cover;border:1px solid #e4e4e7;display:@(hasUrl ? "block" : "none");" />
+    }
+    else
+    {
+        <a class="js-upload-preview d-block mb-1 small text-indigo text-decoration-none" href="@Model.DefaultUrl" target="_blank" rel="noopener noreferrer" style="display:@(hasUrl ? "block" : "none");">ดูไฟล์ปัจจุบัน →</a>
+    }
+
+    <input type="file" class="js-upload-input form-control form-control-sm" accept="@(Model.Kind == "image" ? "image/*" : "*/*")" style="max-width:20rem;" />
+    <p class="js-upload-status small text-muted mt-1 mb-0"></p>
+</div>

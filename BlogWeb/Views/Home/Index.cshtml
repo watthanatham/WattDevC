@@ -1,0 +1,513 @@
+@model BlogWeb.Models.HomeViewModel
+@using BlogWeb.Models
+@{
+    ViewData["Title"] = null;
+
+    var name = Model.Profile?.Name ?? "Your Name";
+    var role = Model.Profile?.Role ?? "Add your role in Admin → Portfolio";
+
+    string[] categoryOrder = { "frontend", "backend", "mobile", "database", "tools", "other" };
+    Dictionary<string, string> categoryLabel = new()
+    {
+        ["frontend"] = "Frontend", ["backend"] = "Backend", ["mobile"] = "Mobile",
+        ["database"] = "Database", ["tools"] = "Tools", ["other"] = "Other",
+    };
+    var skillsByCategory = Model.Skills
+        .GroupBy(s => string.IsNullOrEmpty(s.Category) ? "other" : s.Category)
+        .ToDictionary(g => g.Key, g => g.ToList());
+    var presentCategories = categoryOrder.Where(skillsByCategory.ContainsKey).ToList();
+
+    Dictionary<string, string> typeLabel = new()
+    {
+        ["WORK"] = "Full-time", ["FREELANCE"] = "Freelance / Contract", ["EDUCATION"] = "Education",
+    };
+
+    string FormatPeriod(DateTime start, DateTime? end, string dash) =>
+        $"{start:MMM yyyy} {dash} {(end.HasValue ? end.Value.ToString("MMM yyyy") : (dash == "—" ? "NOW" : "Present"))}";
+
+    List<string> SplitLines(string s) => s.Split('\n').Select(x => x.Trim()).Where(x => x.Length > 0).ToList();
+    List<string> SplitCsv(string s) => s.Split(',').Select(x => x.Trim()).Where(x => x.Length > 0).ToList();
+
+    var questCount = Model.Experiences.Count(e => e.Type != "EDUCATION");
+}
+
+<!-- ============================== FORMAL MODE ============================== -->
+<div class="formal-only container" style="max-width: 48rem;">
+<div class="py-5" style="display:flex; flex-direction:column; gap:4rem;">
+
+    <!-- Hero -->
+    <section class="d-flex flex-column flex-sm-row align-items-center align-items-sm-start gap-4 text-center text-sm-start">
+        @if (!string.IsNullOrEmpty(Model.Profile?.AvatarUrl))
+        {
+            <img src="@Model.Profile.AvatarUrl" alt="@name" class="avatar-hero" />
+        }
+        else
+        {
+            <div class="avatar-hero-fallback">@name.Substring(0, 1)</div>
+        }
+        <div class="flex-fill">
+            <h1 class="h1-responsive">@name</h1>
+            <p class="fw-medium text-indigo mt-1 mb-0" style="font-size:1.125rem;">@role</p>
+            <div class="d-flex flex-wrap justify-content-center justify-content-sm-start gap-3 mt-2 small text-zinc-500">
+                @if (Model.Years > 0) { <span>@Model.Years+ years of experience</span> }
+                @if (!string.IsNullOrEmpty(Model.Profile?.Location)) { <span>📍 @Model.Profile.Location</span> }
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Profile?.Tagline))
+            {
+                <p class="mt-3 text-zinc-600" style="max-width: 36rem;">@Model.Profile.Tagline</p>
+            }
+            <div class="d-flex flex-wrap justify-content-center justify-content-sm-start gap-2 mt-4">
+                @if (!string.IsNullOrEmpty(Model.Profile?.Email))
+                {
+                    <a href="mailto:@Model.Profile.Email" class="btn-pill-dark">Get in touch</a>
+                }
+                @if (!string.IsNullOrEmpty(Model.Profile?.ResumeUrl))
+                {
+                    <a href="@Model.Profile.ResumeUrl" target="_blank" rel="noopener noreferrer" class="btn-pill-outline">Download Resume</a>
+                }
+                @if (!string.IsNullOrEmpty(Model.Profile?.Github))
+                {
+                    <a href="@Model.Profile.Github" target="_blank" rel="noopener noreferrer" class="btn-pill-outline">GitHub</a>
+                }
+                @if (!string.IsNullOrEmpty(Model.Profile?.Linkedin))
+                {
+                    <a href="@Model.Profile.Linkedin" target="_blank" rel="noopener noreferrer" class="btn-pill-outline">LinkedIn</a>
+                }
+            </div>
+        </div>
+    </section>
+
+    @if (!string.IsNullOrEmpty(Model.Profile?.Bio))
+    {
+        <section>
+            <h2 class="fw-bold mb-3" style="font-size:1.25rem; letter-spacing:-0.01em;">About</h2>
+            <p class="text-zinc-600" style="white-space:pre-line;">@Model.Profile.Bio</p>
+        </section>
+    }
+
+    <!-- Work Experience -->
+    <section>
+        <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">Work Experience</h2>
+        @if (Model.Experiences.Count == 0)
+        {
+            <p class="small text-zinc-500">No experience added yet — add it in Admin → Portfolio.</p>
+        }
+        else
+        {
+            <ol class="timeline-formal">
+                @foreach (var exp in Model.Experiences)
+                {
+                    var isCurrent = exp.EndDate == null;
+                    var highlights = SplitLines(exp.Highlights);
+                    var techs = SplitCsv(exp.Tech);
+                    <li>
+                        <span class="timeline-dot @(isCurrent ? "is-current" : "")"></span>
+                        <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2">
+                            <h3 class="fw-semibold mb-0" style="font-size:1rem;">@exp.Role <span class="text-zinc-500">· @exp.Company</span></h3>
+                            <span class="small text-zinc-500">@FormatPeriod(exp.StartDate, exp.EndDate, "–")</span>
+                        </div>
+                        <p class="text-indigo text-uppercase fw-medium mb-0 mt-1" style="font-size:0.75rem; letter-spacing:0.03em;">@(typeLabel.GetValueOrDefault(exp.Type, exp.Type))</p>
+                        @if (!string.IsNullOrWhiteSpace(exp.Summary))
+                        {
+                            <p class="small text-zinc-600 mt-2" style="white-space:pre-line;">@exp.Summary</p>
+                        }
+                        @if (highlights.Count > 0)
+                        {
+                            <ul class="mt-2 mb-0 ps-0" style="list-style:none;">
+                                @foreach (var h in highlights)
+                                {
+                                    <li class="d-flex gap-2 small"><span class="text-indigo">•</span><span>@h</span></li>
+                                }
+                            </ul>
+                        }
+                        @if (techs.Count > 0)
+                        {
+                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                @foreach (var t in techs) { <span class="tag-pill">@t</span> }
+                            </div>
+                        }
+                    </li>
+                }
+            </ol>
+        }
+    </section>
+
+    <!-- Skills -->
+    @if (Model.Skills.Count > 0)
+    {
+        <section>
+            <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">Skills</h2>
+            <div class="row g-3">
+                @foreach (var cat in presentCategories)
+                {
+                    <div class="col-12 col-sm-6">
+                        <div class="card-formal p-3 h-100">
+                            <p class="text-uppercase fw-semibold text-zinc-500 mb-2" style="font-size:0.75rem; letter-spacing:0.03em;">@categoryLabel[cat]</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var s in skillsByCategory[cat])
+                                {
+                                    <span class="skill-pill"><img src="@s.IconUrl" alt="" class="skill-icon" />@s.Name</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    <!-- Case Studies -->
+    @if (Model.CaseStudies.Count > 0)
+    {
+        <section>
+            <h2 class="fw-bold mb-1" style="font-size:1.25rem; letter-spacing:-0.01em;">Case Studies</h2>
+            <p class="small text-zinc-500 mb-4">Selected problems and how they were solved.</p>
+            <div class="d-flex flex-column gap-3">
+                @foreach (var cs in Model.CaseStudies)
+                {
+                    <article class="card-formal p-4">
+                        <h3 class="fw-semibold" style="font-size:1rem;">@cs.Title</h3>
+                        <div class="mt-3 d-flex flex-column gap-3">
+                            <div class="case-study-row">
+                                <p class="text-indigo text-uppercase fw-semibold mb-1" style="font-size:0.75rem;">Problem</p>
+                                <p class="small text-zinc-600 mb-0">@cs.Problem</p>
+                            </div>
+                            <div class="case-study-row">
+                                <p class="text-indigo text-uppercase fw-semibold mb-1" style="font-size:0.75rem;">Approach</p>
+                                <p class="small text-zinc-600 mb-0">@cs.Solution</p>
+                            </div>
+                            <div class="case-study-row">
+                                <p class="text-indigo text-uppercase fw-semibold mb-1" style="font-size:0.75rem;">Result</p>
+                                <p class="small text-zinc-600 mb-0">@cs.Result</p>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+    }
+
+    <!-- Projects -->
+    @if (Model.Projects.Count > 0)
+    {
+        <section>
+            <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">Projects</h2>
+            <div class="row g-3">
+                @foreach (var p in Model.Projects)
+                {
+                    <div class="col-12 col-sm-6">
+                        <article class="project-card-formal h-100">
+                            @if (!string.IsNullOrEmpty(p.ImageUrl))
+                            {
+                                <img src="@p.ImageUrl" alt="@p.Title" />
+                            }
+                            <div class="p-3 d-flex flex-column flex-fill">
+                                <h3 class="fw-semibold" style="font-size:1rem;">@p.Title</h3>
+                                <p class="small text-zinc-600 flex-fill">@p.Description</p>
+                                @if (!string.IsNullOrEmpty(p.Link))
+                                {
+                                    <a href="@p.Link" target="_blank" rel="noopener noreferrer" class="small fw-medium text-indigo text-decoration-none">View project →</a>
+                                }
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    <!-- Blog -->
+    @if (Model.LatestPosts.Count > 0)
+    {
+        <section>
+            <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">From the blog</h2>
+            <div class="d-flex flex-column gap-2">
+                @foreach (var post in Model.LatestPosts)
+                {
+                    <a href="/blog/@post.Slug" class="card-formal d-flex justify-content-between align-items-center gap-3 px-3 py-2 text-decoration-none text-body">
+                        <span class="small fw-medium">@post.Title</span>
+                        <span class="small text-zinc-500 flex-shrink-0">@post.CreatedAt.ToString("dd MMM yyyy")</span>
+                    </a>
+                }
+            </div>
+            <a href="/blog" class="d-inline-block mt-3 small fw-medium text-indigo text-decoration-none">All posts →</a>
+        </section>
+    }
+
+    <!-- Contact -->
+    @if (!string.IsNullOrEmpty(Model.Profile?.Email) || !string.IsNullOrEmpty(Model.Profile?.Github) || !string.IsNullOrEmpty(Model.Profile?.Linkedin))
+    {
+        <section class="card-formal text-center p-4 p-sm-5">
+            <h2 class="fw-bold" style="font-size:1.25rem;">Let's work together</h2>
+            <p class="small text-zinc-500 mt-2">Open to full-time and freelance opportunities.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+                @if (!string.IsNullOrEmpty(Model.Profile?.Email)) { <a href="mailto:@Model.Profile.Email" class="btn-pill-dark">@Model.Profile.Email</a> }
+                @if (!string.IsNullOrEmpty(Model.Profile?.Github)) { <a href="@Model.Profile.Github" target="_blank" rel="noopener noreferrer" class="btn-pill-outline">GitHub</a> }
+                @if (!string.IsNullOrEmpty(Model.Profile?.Linkedin)) { <a href="@Model.Profile.Linkedin" target="_blank" rel="noopener noreferrer" class="btn-pill-outline">LinkedIn</a> }
+            </div>
+        </section>
+    }
+
+</div>
+</div>
+
+<!-- ============================== GAME MODE ============================== -->
+<div class="game-only container" style="max-width: 64rem;">
+<div class="py-5" style="display:flex; flex-direction:column; gap:4rem;">
+
+    <!-- Hero -->
+    <section class="pixel-panel position-relative p-4 p-sm-5">
+        <span class="pixel-corner" style="top:6px; left:6px; background:var(--magic);"></span>
+        <span class="pixel-corner" style="top:6px; right:6px; background:var(--hp);"></span>
+        <span class="pixel-corner" style="bottom:6px; left:6px; background:var(--xp);"></span>
+        <span class="pixel-corner" style="bottom:6px; right:6px; background:var(--mp);"></span>
+
+        <div class="d-flex flex-column flex-sm-row align-items-center align-items-sm-start gap-4">
+            <div class="hero-avatar-pixel sprite-bob">
+                @if (!string.IsNullOrEmpty(Model.Profile?.AvatarUrl))
+                {
+                    <img src="@Model.Profile.AvatarUrl" alt="@name" />
+                }
+                else
+                {
+                    <span class="fallback-letter font-pixel">@name.Substring(0, 1)</span>
+                }
+            </div>
+            <div class="flex-fill text-center text-sm-start">
+                <p class="font-pixel text-muted mb-2" style="font-size:9px;">PLAYER</p>
+                <h1 class="font-pixel h1-pixel-responsive">@name</h1>
+                <div class="font-pixel d-flex flex-wrap justify-content-center justify-content-sm-start gap-3 mt-2" style="font-size:9px;">
+                    <span style="color:var(--hp);">CLASS: @role</span>
+                    @if (Model.Years > 0) { <span style="color:var(--xp);">LV.@Model.Years</span> }
+                    @if (!string.IsNullOrEmpty(Model.Profile?.Location)) { <span class="text-muted">📍 @Model.Profile.Location</span> }
+                </div>
+                @if (!string.IsNullOrEmpty(Model.Profile?.Tagline))
+                {
+                    <p class="small text-muted mt-3">@Model.Profile.Tagline</p>
+                }
+                <div class="row row-cols-3 g-2 mt-3 mx-auto mx-sm-0" style="max-width:24rem;">
+                    <div class="col"><div class="mini-stat"><p class="val font-pixel mb-0">@(Model.Years > 0 ? Model.Years + "Y" : "—")</p><p class="lbl font-pixel mb-0">EXP</p></div></div>
+                    <div class="col"><div class="mini-stat"><p class="val font-pixel mb-0">@questCount</p><p class="lbl font-pixel mb-0">QUESTS</p></div></div>
+                    <div class="col"><div class="mini-stat"><p class="val font-pixel mb-0">@Model.Projects.Count</p><p class="lbl font-pixel mb-0">PROJECTS</p></div></div>
+                </div>
+                <div class="d-flex flex-wrap justify-content-center justify-content-sm-start gap-2 mt-4">
+                    @if (!string.IsNullOrEmpty(Model.Profile?.Email))
+                    {
+                        <a href="mailto:@Model.Profile.Email" class="pixel-btn pixel-btn-primary px-3 py-2" style="font-size:10px;">✉ CONTACT</a>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Profile?.ResumeUrl))
+                    {
+                        <a href="@Model.Profile.ResumeUrl" target="_blank" rel="noopener noreferrer" class="pixel-btn pixel-btn-xp px-3 py-2" style="font-size:10px;">⬇ RESUME</a>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Profile?.Github))
+                    {
+                        <a href="@Model.Profile.Github" target="_blank" rel="noopener noreferrer" class="pixel-btn pixel-btn-ghost px-3 py-2" style="font-size:10px;">GITHUB</a>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Profile?.Linkedin))
+                    {
+                        <a href="@Model.Profile.Linkedin" target="_blank" rel="noopener noreferrer" class="pixel-btn pixel-btn-ghost px-3 py-2" style="font-size:10px;">LINKEDIN</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @if (!string.IsNullOrEmpty(Model.Profile?.Bio))
+    {
+        <section>
+            <h2 class="font-pixel mb-4 d-flex align-items-center gap-2" style="font-size:14px;"><span class="blink" style="color:var(--xp);">▶</span>ABOUT</h2>
+            <div class="pixel-panel p-4">
+                <p class="small" style="white-space:pre-line; line-height:1.8;">@Model.Profile.Bio</p>
+            </div>
+        </section>
+    }
+
+    <!-- Work Experience -->
+    <section>
+        <h2 class="font-pixel mb-4 d-flex align-items-center gap-2" style="font-size:14px;"><span class="blink" style="color:var(--magic);">▶</span>WORK EXPERIENCE</h2>
+        @if (Model.Experiences.Count == 0)
+        {
+            <div class="pixel-panel p-4 text-center">
+                <p class="font-pixel text-muted mb-2" style="font-size:10px;">NO WORK EXPERIENCE YET</p>
+                <p class="small text-muted mb-0">เพิ่มประสบการณ์ทำงานได้ที่หน้า Admin → Portfolio</p>
+            </div>
+        }
+        else
+        {
+            <ol class="timeline-game">
+                @foreach (var exp in Model.Experiences)
+                {
+                    var isCurrent = exp.EndDate == null;
+                    var highlights = SplitLines(exp.Highlights);
+                    var techs = SplitCsv(exp.Tech);
+                    var badgeClass = exp.Type switch { "FREELANCE" => "badge-side", "EDUCATION" => "badge-training", _ => "badge-quest" };
+                    var badgeLabel = exp.Type switch { "FREELANCE" => "SIDE QUEST", "EDUCATION" => "TRAINING", _ => "MAIN QUEST" };
+                    <li>
+                        <span class="timeline-game-dot @(isCurrent ? "is-current" : "")"></span>
+                        <div class="pixel-panel p-3">
+                            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                <span class="badge-pixel @badgeClass">@badgeLabel</span>
+                                @if (isCurrent) { <span class="badge-pixel badge-active">ACTIVE</span> }
+                                <span class="font-pixel text-muted ms-auto" style="font-size:9px;">@FormatPeriod(exp.StartDate, exp.EndDate, "—")</span>
+                            </div>
+                            <h3 class="font-pixel" style="font-size:11px;">@exp.Role</h3>
+                            <p class="font-pixel mt-1" style="font-size:10px; color:var(--mp);">@@ @exp.Company</p>
+                            @if (!string.IsNullOrWhiteSpace(exp.Summary))
+                            {
+                                <p class="small text-muted mt-2" style="white-space:pre-line;">@exp.Summary</p>
+                            }
+                            @if (highlights.Count > 0)
+                            {
+                                <ul class="mt-2 mb-0 ps-0" style="list-style:none;">
+                                    @foreach (var h in highlights)
+                                    {
+                                        <li class="d-flex gap-2 small"><span style="color:var(--xp);">▸</span><span>@h</span></li>
+                                    }
+                                </ul>
+                            }
+                            @if (techs.Count > 0)
+                            {
+                                <div class="d-flex flex-wrap gap-2 mt-3">
+                                    @foreach (var t in techs) { <span class="tech-pill-pixel">@t</span> }
+                                </div>
+                            }
+                        </div>
+                    </li>
+                }
+            </ol>
+        }
+    </section>
+
+    <!-- Stats (Skills) -->
+    @if (Model.Skills.Count > 0)
+    {
+        <section>
+            <h2 class="font-pixel mb-4 d-flex align-items-center gap-2" style="font-size:14px;"><span class="blink" style="color:var(--hp);">▶</span>SKILLS</h2>
+            <div class="row g-3">
+                @foreach (var cat in presentCategories)
+                {
+                    <div class="col-12 col-sm-6">
+                        <div class="pixel-panel p-3 h-100">
+                            <p class="font-pixel text-muted mb-3" style="font-size:9px;">@categoryLabel[cat].ToUpperInvariant()</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var s in skillsByCategory[cat])
+                                {
+                                    <span class="skill-pill-pixel"><img src="@s.IconUrl" alt="" class="skill-icon" /><span class="font-pixel" style="font-size:9px;">@s.Name</span></span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    <!-- Boss Battles -->
+    @if (Model.CaseStudies.Count > 0)
+    {
+        <section>
+            <h2 class="font-pixel mb-1 d-flex align-items-center gap-2" style="font-size:14px;"><span class="blink" style="color:var(--dmg);">▶</span>BOSS BATTLES</h2>
+            <p class="small text-muted mb-4">ปัญหายากที่เคยเจอ และวิธีที่แก้มัน</p>
+            <div class="d-flex flex-column gap-3">
+                @foreach (var battle in Model.CaseStudies)
+                {
+                    <article class="pixel-panel p-3">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge-pixel badge-boss">BOSS</span>
+                            <h3 class="font-pixel mb-0" style="font-size:11px;">@battle.Title</h3>
+                        </div>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="boss-row">
+                                <p class="font-pixel mb-1" style="font-size:8px; color:var(--dmg);">⚠ PROBLEM</p>
+                                <p class="small mb-0">@battle.Problem</p>
+                            </div>
+                            <div class="boss-row">
+                                <p class="font-pixel mb-1" style="font-size:8px; color:var(--mp);">⚔ STRATEGY</p>
+                                <p class="small mb-0">@battle.Solution</p>
+                            </div>
+                            <div class="boss-row">
+                                <p class="font-pixel mb-1" style="font-size:8px; color:var(--xp);">🏆 REWARD</p>
+                                <p class="small mb-0">@battle.Result</p>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+    }
+
+    <!-- Projects -->
+    @if (Model.Projects.Count > 0)
+    {
+        <section>
+            <h2 class="font-pixel mb-4 d-flex align-items-center gap-2" style="font-size:14px;"><span class="blink" style="color:var(--mp);">▶</span>PROJECTS</h2>
+            <div class="row g-3">
+                @foreach (var p in Model.Projects)
+                {
+                    <div class="col-12 col-sm-6">
+                        <article class="pixel-panel project-card-pixel h-100">
+                            @if (!string.IsNullOrEmpty(p.ImageUrl))
+                            {
+                                <img src="@p.ImageUrl" alt="@p.Title" />
+                            }
+                            <div class="p-3 d-flex flex-column flex-fill">
+                                <h3 class="font-pixel" style="font-size:11px;">@p.Title</h3>
+                                <p class="small text-muted flex-fill mt-2">@p.Description</p>
+                                @if (!string.IsNullOrEmpty(p.Link))
+                                {
+                                    <a href="@p.Link" target="_blank" rel="noopener noreferrer" class="font-pixel text-decoration-none mt-2" style="font-size:9px; color:var(--mp);">VIEW →</a>
+                                }
+                            </div>
+                        </article>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    <!-- Blog -->
+    @if (Model.LatestPosts.Count > 0)
+    {
+        <section>
+            <h2 class="font-pixel mb-4 d-flex align-items-center gap-2" style="font-size:14px;"><span class="blink" style="color:var(--hp);">▶</span>BLOG</h2>
+            <div class="d-flex flex-column gap-2">
+                @foreach (var post in Model.LatestPosts)
+                {
+                    <a href="/blog/@post.Slug" class="pixel-panel-sm d-flex align-items-center gap-3 p-3 text-decoration-none text-body">
+                        <span class="font-pixel" style="font-size:10px; color:var(--magic);">▸</span>
+                        <span class="flex-fill small fw-medium">@post.Title</span>
+                        <span class="font-pixel text-muted d-none d-sm-block" style="font-size:8px;">@post.CreatedAt.ToString("dd MMM yyyy")</span>
+                    </a>
+                }
+            </div>
+            <a href="/blog" class="font-pixel d-inline-block mt-3 text-decoration-none" style="font-size:9px; color:var(--mp);">ALL POSTS →</a>
+        </section>
+    }
+
+    <!-- Contact -->
+    @if (!string.IsNullOrEmpty(Model.Profile?.Email) || !string.IsNullOrEmpty(Model.Profile?.Github) || !string.IsNullOrEmpty(Model.Profile?.Linkedin))
+    {
+        <section>
+            <h2 class="font-pixel mb-4 d-flex align-items-center gap-2" style="font-size:14px;"><span class="blink" style="color:var(--magic);">▶</span>CONTACT</h2>
+            <div class="pixel-panel p-4">
+                <p class="font-pixel mb-4" style="font-size:10px;">READY TO TEAM UP?<span class="blink ms-1">_</span></p>
+                <div class="d-flex flex-column gap-2">
+                    @if (!string.IsNullOrEmpty(Model.Profile?.Email))
+                    {
+                        <a href="mailto:@Model.Profile.Email" class="contact-row-pixel small"><span class="contact-label-pixel">EMAIL</span><span>@Model.Profile.Email</span></a>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Profile?.Github))
+                    {
+                        <a href="@Model.Profile.Github" target="_blank" rel="noopener noreferrer" class="contact-row-pixel small"><span class="contact-label-pixel">GITHUB</span><span>@System.Text.RegularExpressions.Regex.Replace(Model.Profile.Github, "^https?://", "")</span></a>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Profile?.Linkedin))
+                    {
+                        <a href="@Model.Profile.Linkedin" target="_blank" rel="noopener noreferrer" class="contact-row-pixel small"><span class="contact-label-pixel">LINKEDIN</span><span>@System.Text.RegularExpressions.Regex.Replace(Model.Profile.Linkedin, "^https?://", "")</span></a>
+                    }
+                </div>
+            </div>
+        </section>
+    }
+
+</div>
+</div>

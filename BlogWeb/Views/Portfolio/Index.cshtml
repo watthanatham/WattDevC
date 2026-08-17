@@ -1,0 +1,321 @@
+@model BlogWeb.Models.PortfolioIndexViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "จัดการ Portfolio";
+
+    var skillCategories = new (string Value, string Label)[]
+    {
+        ("frontend", "Frontend"), ("backend", "Backend"), ("mobile", "Mobile"),
+        ("database", "Database"), ("tools", "Tools"), ("other", "อื่นๆ"),
+    };
+    string SkillCategoryLabel(string v) => skillCategories.FirstOrDefault(c => c.Value == v).Label ?? v;
+
+    var expTypeLabels = new Dictionary<string, string> { ["WORK"] = "งานประจำ", ["FREELANCE"] = "Freelance", ["EDUCATION"] = "การศึกษา/อบรม" };
+}
+
+<h1 class="fw-bold" style="font-size:1.5rem;">จัดการ Portfolio</h1>
+
+<div class="d-flex flex-column gap-5 mt-4">
+
+    @* ============================== PROFILE ============================== *@
+    <section id="profile">
+        <h2 class="fw-semibold mb-1" style="font-size:1.125rem;">โปรไฟล์</h2>
+        <p class="small text-muted mb-3">ข้อมูลส่วนตัวและช่องทางติดต่อ แสดงบนการ์ดหลักของหน้าแรก</p>
+
+        <form method="post" action="/admin/portfolio/profile" class="d-flex flex-column gap-3">
+            @Html.AntiForgeryToken()
+
+            <div class="row g-3">
+                <div class="col-12 col-sm-6">
+                    <label class="form-label-admin">ชื่อ</label>
+                    <input type="text" name="Name" required value="@Model.Profile?.Name" class="form-control-admin" />
+                </div>
+                <div class="col-12 col-sm-6">
+                    <label class="form-label-admin">ตำแหน่ง (CLASS)</label>
+                    <input type="text" name="Role" required value="@Model.Profile?.Role" class="form-control-admin" />
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label-admin">Tagline</label>
+                <p class="small text-muted mb-1">ประโยคเดียวสั้นๆ แสดงใต้ชื่อบนการ์ดหลัก</p>
+                <input type="text" name="Tagline" value="@Model.Profile?.Tagline" placeholder="เช่น สร้างเว็บที่เร็วและใช้งานง่าย ด้วย React และ Node.js" class="form-control-admin" />
+            </div>
+
+            <div>
+                <label class="form-label-admin">Bio</label>
+                <p class="small text-muted mb-1">เล่าตัวตนแบบยาวขึ้น แสดงในส่วน ABOUT</p>
+                <textarea name="Bio" required rows="5" class="form-control-admin">@Model.Profile?.Bio</textarea>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-12 col-sm-6">
+                    <label class="form-label-admin">ที่อยู่</label>
+                    <input type="text" name="Location" value="@Model.Profile?.Location" placeholder="เช่น Bangkok, Thailand" class="form-control-admin" />
+                </div>
+                <div class="col-12 col-sm-6">
+                    <label class="form-label-admin">อีเมล</label>
+                    <input type="email" name="Email" value="@Model.Profile?.Email" class="form-control-admin" />
+                </div>
+                <div class="col-12 col-sm-6">
+                    <label class="form-label-admin">GitHub URL</label>
+                    <input type="url" name="Github" value="@Model.Profile?.Github" placeholder="https://github.com/username" class="form-control-admin" />
+                </div>
+                <div class="col-12 col-sm-6">
+                    <label class="form-label-admin">LinkedIn URL</label>
+                    <input type="url" name="Linkedin" value="@Model.Profile?.Linkedin" placeholder="https://linkedin.com/in/username" class="form-control-admin" />
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label-admin">เรซูเม่ (PDF)</label>
+                <p class="small text-muted mb-1">@(!string.IsNullOrEmpty(Model.Profile?.ResumeUrl) ? "อัปโหลดไฟล์ใหม่เพื่อแทนที่ไฟล์เดิม" : "ปุ่ม RESUME บนหน้าแรกจะแสดงก็ต่อเมื่ออัปโหลดไฟล์แล้ว")</p>
+                @await Html.PartialAsync("_UploadField", ("ResumeUrl", "resume", (string?)Model.Profile?.ResumeUrl, "file"))
+            </div>
+
+            <div>
+                <label class="form-label-admin">รูปโปรไฟล์ @(!string.IsNullOrEmpty(Model.Profile?.AvatarUrl) ? "(อัปโหลดใหม่เพื่อแทนที่)" : "")</label>
+                @await Html.PartialAsync("_UploadField", ("AvatarUrl", "profile", (string?)Model.Profile?.AvatarUrl, "image"))
+            </div>
+
+            <div class="admin-card">
+                <p class="fw-semibold small mb-1">นามปากกา (สำหรับ Blog)</p>
+                <p class="small text-muted mb-3">ชื่อ + bio + รูป ที่จะแสดงเป็นผู้เขียนในหน้า Blog (ถ้าเว้นว่าง จะใช้ชื่อจริง)</p>
+                <div class="d-flex flex-column gap-3">
+                    <div>
+                        <label class="form-label-admin">ชื่อนามปากกา</label>
+                        <input type="text" name="PenName" value="@Model.Profile?.PenName" placeholder="เช่น WATT.STUDIO" class="form-control-admin" />
+                    </div>
+                    <div>
+                        <label class="form-label-admin">Bio นามปากกา</label>
+                        <p class="small text-muted mb-1">แสดงใต้ชื่อบนหน้า Journal</p>
+                        <textarea name="PenBio" rows="2" placeholder="Street, portrait & fashion photography." class="form-control-admin">@Model.Profile?.PenBio</textarea>
+                    </div>
+                    <div>
+                        <label class="form-label-admin">รูปนามปากกา @(!string.IsNullOrEmpty(Model.Profile?.PenAvatarUrl) ? "(อัปโหลดใหม่เพื่อแทนที่)" : "")</label>
+                        @await Html.PartialAsync("_UploadField", ("PenAvatarUrl", "pen", (string?)Model.Profile?.PenAvatarUrl, "image"))
+                    </div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ProfileError))
+            {
+                <p class="text-danger small mb-0">@Model.ProfileError</p>
+            }
+            @if (Model.ProfileSuccess)
+            {
+                <p class="small mb-0" style="color:#10b981;">บันทึกข้อมูลแล้ว</p>
+            }
+
+            <button type="submit" class="btn-pill-dark border-0" style="width:fit-content;">บันทึกโปรไฟล์</button>
+        </form>
+    </section>
+
+    @* ============================== EXPERIENCE ============================== *@
+    <section id="experience">
+        <h2 class="fw-semibold mb-1" style="font-size:1.125rem;">ประสบการณ์ทำงาน (Work Experience)</h2>
+        <p class="small text-muted mb-3">ส่วนสำคัญที่สุดสำหรับการหางาน — เน้นผลงานที่วัดผลเป็นตัวเลขได้</p>
+
+        <div class="d-flex flex-column gap-3 mb-4">
+            @if (Model.Experiences.Count == 0)
+            {
+                <p class="small text-muted">ยังไม่มีประสบการณ์ทำงาน — เพิ่มด้านล่างได้เลย</p>
+            }
+            @foreach (var exp in Model.Experiences)
+            {
+                var techs = exp.Tech.Split(',').Select(t => t.Trim()).Where(t => t.Length > 0).ToList();
+                var showEdit = Model.ExperienceErrorId == exp.Id;
+                <div id="exp-view-@exp.Id" class="admin-card @(showEdit ? "d-none" : "")">
+                    <div class="d-flex align-items-start justify-content-between gap-3">
+                        <div class="min-w-0">
+                            <p class="fw-medium mb-0">@exp.Role <span class="text-muted">@@ @exp.Company</span></p>
+                            <p class="small text-muted mt-1 mb-0">@(expTypeLabels.GetValueOrDefault(exp.Type, exp.Type)) · @exp.StartDate.ToString("yyyy-MM") – @(exp.EndDate.HasValue ? exp.EndDate.Value.ToString("yyyy-MM") : "ปัจจุบัน")</p>
+                            <p class="small text-muted mt-1 mb-0" style="display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">@exp.Summary</p>
+                            @if (techs.Count > 0)
+                            {
+                                <div class="d-flex flex-wrap gap-1 mt-2">
+                                    @foreach (var t in techs)
+                                    {
+                                        <span class="tag-pill" style="font-size:11px;">@t</span>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <div class="d-flex flex-shrink-0 align-items-center gap-3 small">
+                            <button type="button" class="js-exp-edit btn btn-link p-0 fw-medium text-indigo text-decoration-none" data-id="@exp.Id">แก้ไข</button>
+                            <form method="post" action="/admin/portfolio/experience/@exp.Id/delete" class="js-confirm-form" data-confirm='ลบประสบการณ์ "@exp.Role @@ @exp.Company" ใช่หรือไม่?'>
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-link p-0 fw-medium text-danger text-decoration-none">ลบ</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="exp-edit-@exp.Id" method="post" action="/admin/portfolio/experience/@exp.Id" class="admin-form-grid admin-card @(showEdit ? "" : "d-none")" style="border:2px solid #6366f1;">
+                    @Html.AntiForgeryToken()
+                    <p class="fw-semibold small mb-0" style="grid-column:1/-1;">แก้ไขประสบการณ์</p>
+                    @await Html.PartialAsync("_ExperienceFields", exp)
+                    @if (showEdit && !string.IsNullOrEmpty(Model.ExperienceError))
+                    {
+                        <p class="text-danger small mb-0" style="grid-column:1/-1;">@Model.ExperienceError</p>
+                    }
+                    <div class="d-flex gap-2" style="grid-column:1/-1;">
+                        <button type="submit" class="btn-pill-dark border-0" style="width:fit-content;">บันทึกการแก้ไข</button>
+                        <button type="button" class="js-exp-cancel btn-pill-outline" data-id="@exp.Id">ยกเลิก</button>
+                    </div>
+                </form>
+            }
+        </div>
+
+        <form method="post" action="/admin/portfolio/experience" class="admin-form-grid admin-card">
+            @Html.AntiForgeryToken()
+            <p class="fw-semibold small mb-0" style="grid-column:1/-1;">+ เพิ่มประสบการณ์</p>
+            @await Html.PartialAsync("_ExperienceFields", (BlogWeb.Models.Experience?)null)
+            @if (Model.ExperienceErrorId == null && !string.IsNullOrEmpty(Model.ExperienceError))
+            {
+                <p class="text-danger small mb-0" style="grid-column:1/-1;">@Model.ExperienceError</p>
+            }
+            <button type="submit" class="btn-pill-dark border-0" style="width:fit-content; grid-column:1/-1;">+ เพิ่มประสบการณ์</button>
+        </form>
+    </section>
+
+    @* ============================== SKILLS ============================== *@
+    <section id="skills">
+        <h2 class="fw-semibold mb-1" style="font-size:1.125rem;">Skills (Stats)</h2>
+        <p class="small text-muted mb-3">ระดับ 0-100 จะแสดงเป็นหลอดพลังแบบเกม จัดกลุ่มตามหมวดหมู่</p>
+
+        <div class="d-flex flex-column gap-2 mb-4">
+            @if (Model.Skills.Count == 0)
+            {
+                <p class="small text-muted">ยังไม่มี skill</p>
+            }
+            @foreach (var skill in Model.Skills)
+            {
+                <div class="d-flex flex-wrap align-items-center gap-3 admin-card py-2">
+                    <img src="@skill.IconUrl" alt="@skill.Name" style="width:2rem;height:2rem;object-fit:contain;" />
+                    <div class="flex-fill">
+                        <p class="small fw-medium mb-0">@skill.Name</p>
+                        <p class="small text-muted mb-0">@SkillCategoryLabel(skill.Category)</p>
+                    </div>
+                    <form method="post" action="/admin/portfolio/skills/@skill.Id/icon" class="d-flex align-items-center gap-2">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="iconUrl" class="js-icon-hidden" />
+                        <label class="small fw-medium text-indigo mb-0" style="cursor:pointer;">
+                            เปลี่ยนไอคอน
+                            <input type="file" accept="image/*" class="js-icon-file d-none" />
+                        </label>
+                        <span class="js-icon-status small text-muted"></span>
+                    </form>
+                    <form method="post" action="/admin/portfolio/skills/@skill.Id/delete" class="js-confirm-form" data-confirm='ลบ skill "@skill.Name" ใช่หรือไม่?'>
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-link p-0 small fw-medium text-danger text-decoration-none">ลบ</button>
+                    </form>
+                </div>
+            }
+        </div>
+
+        <form method="post" action="/admin/portfolio/skills" class="admin-form-grid admin-card">
+            @Html.AntiForgeryToken()
+            <p class="fw-semibold small mb-0" style="grid-column:1/-1;">+ เพิ่ม Skill</p>
+            <div>
+                <input type="text" name="Name" placeholder="ชื่อ skill เช่น React" required class="form-control-admin" />
+            </div>
+            <div>
+                <select name="Category" class="form-control-admin">
+                    @foreach (var c in skillCategories)
+                    {
+                        <option value="@c.Value">@c.Label</option>
+                    }
+                </select>
+            </div>
+            <div style="grid-column:1/-1;">
+                <span class="d-block small text-muted mb-1">ไฟล์ไอคอน (แนะนำ PNG/SVG พื้นหลังโปร่ง)</span>
+                @await Html.PartialAsync("_UploadField", ("IconUrl", "skills", (string?)null, "image"))
+            </div>
+            @if (!string.IsNullOrEmpty(Model.SkillError))
+            {
+                <p class="text-danger small mb-0" style="grid-column:1/-1;">@Model.SkillError</p>
+            }
+            <button type="submit" class="btn-pill-dark border-0" style="width:fit-content; grid-column:1/-1;">+ เพิ่ม</button>
+        </form>
+    </section>
+
+    @* ============================== PROJECTS ============================== *@
+    <section id="projects">
+        <h2 class="fw-semibold mb-1" style="font-size:1.125rem;">Projects</h2>
+        <p class="small text-muted mb-3">ผลงาน — กรอกส่วน Boss Battle เพิ่มได้เพื่อโชว์การแก้ปัญหา</p>
+
+        <div class="admin-card p-0 mb-4">
+            @if (Model.Projects.Count == 0)
+            {
+                <p class="small text-muted p-3 mb-0">ยังไม่มีโปรเจค</p>
+            }
+            else
+            {
+                @for (var i = 0; i < Model.Projects.Count; i++)
+                {
+                    var project = Model.Projects[i];
+                    var isBoss = !string.IsNullOrEmpty(project.Problem) && !string.IsNullOrEmpty(project.Solution) && !string.IsNullOrEmpty(project.Result);
+                    <div class="d-flex align-items-center gap-3 px-3 py-2 @(i > 0 ? "border-top" : "")" style="border-color:#e4e4e7;">
+                        @if (!string.IsNullOrEmpty(project.ImageUrl))
+                        {
+                            <img src="@project.ImageUrl" alt="@project.Title" style="width:3rem;height:3rem;object-fit:cover;border-radius:0.5rem;flex-shrink:0;" />
+                        }
+                        <div class="flex-fill text-truncate">
+                            <p class="fw-medium mb-0 text-truncate">
+                                @project.Title
+                                @if (isBoss)
+                                {
+                                    <span class="badge" style="background:rgba(239,68,68,0.15); color:#ef4444; font-size:10px;" title="แสดงเป็น Boss Battle บนหน้าแรก">⚔️ BOSS</span>
+                                }
+                            </p>
+                            <p class="small text-muted text-truncate mb-0">@project.Description</p>
+                        </div>
+                        <form method="post" action="/admin/portfolio/projects/@project.Id/delete" class="js-confirm-form" data-confirm='ลบโปรเจค "@project.Title" ใช่หรือไม่?'>
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-link p-0 small fw-medium text-danger text-decoration-none flex-shrink-0">ลบ</button>
+                        </form>
+                    </div>
+                }
+            }
+        </div>
+
+        <form method="post" action="/admin/portfolio/projects" class="admin-form-grid admin-card">
+            @Html.AntiForgeryToken()
+            <p class="fw-semibold small mb-0" style="grid-column:1/-1;">+ เพิ่มโปรเจค</p>
+            <div>
+                <input type="text" name="Title" placeholder="ชื่อโปรเจค" required class="form-control-admin" />
+            </div>
+            <div>
+                <input type="url" name="Link" placeholder="ลิงก์ (ถ้ามี)" class="form-control-admin" />
+            </div>
+            <div style="grid-column:1/-1;">
+                <textarea name="Description" placeholder="คำอธิบายโปรเจค" required rows="2" class="form-control-admin"></textarea>
+            </div>
+            <div style="grid-column:1/-1;">
+                @await Html.PartialAsync("_UploadField", ("ImageUrl", "projects", (string?)null, "image"))
+            </div>
+
+            <div class="admin-card" style="grid-column:1/-1; background:#fafafa;">
+                <p class="fw-semibold small mb-1">⚔️ Boss Battle (ไม่บังคับ)</p>
+                <p class="small text-muted mb-2">กรอกครบทั้ง 3 ช่อง โปรเจคนี้จะแสดงเป็นการ์ด "Boss Battle" บนหน้าแรกด้วย — ส่วนนี้ช่วยให้คนจ้างเห็นว่าคุณแก้ปัญหาเป็น</p>
+                <div class="d-flex flex-column gap-2">
+                    <textarea name="Problem" placeholder="⚠ ปัญหา: เจอปัญหาอะไร? เช่น ระบบค้นหาช้า 8 วินาที" rows="2" class="form-control-admin"></textarea>
+                    <textarea name="Solution" placeholder="⚔ วิธีแก้: ทำอะไรไปบ้าง? เช่น เพิ่ม index, แก้ N+1 query" rows="2" class="form-control-admin"></textarea>
+                    <textarea name="Result" placeholder="🏆 ผลลัพธ์: วัดผลได้เท่าไหร่? เช่น 8s → 0.3s เร็วขึ้น 26 เท่า" rows="2" class="form-control-admin"></textarea>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ProjectError))
+            {
+                <p class="text-danger small mb-0" style="grid-column:1/-1;">@Model.ProjectError</p>
+            }
+            <button type="submit" class="btn-pill-dark border-0" style="width:fit-content; grid-column:1/-1;">+ เพิ่มโปรเจค</button>
+        </form>
+    </section>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/admin-portfolio.js" asp-append-version="true"></script>
+}

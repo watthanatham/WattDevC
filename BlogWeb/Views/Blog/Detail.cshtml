@@ -1,0 +1,83 @@
+@model BlogWeb.Models.BlogDetailViewModel
+@using BlogWeb.Services
+@{
+    Layout = "_BlogLayout";
+    ViewData["Title"] = Model.Post.Title;
+    ViewData["Description"] = Model.Post.Excerpt;
+    ViewData["Author"] = Model.Author;
+    var sanitizedBody = PostHtmlSanitizer.Sanitize(Model.Post.Body);
+}
+
+<article>
+    <header class="article-header">
+        <a href="/blog?cat=@Model.Post.Category" class="article-cat-link">@BlogHelpers.CategoryLabel(Model.Post.Category)</a>
+        <h1 class="article-title">@Model.Post.Title</h1>
+        @if (!string.IsNullOrEmpty(Model.Post.Excerpt))
+        {
+            <p class="article-excerpt">@Model.Post.Excerpt</p>
+        }
+        <div class="article-meta">
+            <span class="d-flex align-items-center gap-2">
+                @if (!string.IsNullOrEmpty(Model.PenAvatarUrl))
+                {
+                    <img src="@Model.PenAvatarUrl" alt="@Model.Author" class="article-avatar" />
+                }
+                else
+                {
+                    <span class="article-avatar-fallback">@Model.Author.Substring(0, 1)</span>
+                }
+                <span class="fw-medium">@Model.Author</span>
+            </span>
+            <span aria-hidden="true">·</span>
+            <span>@Model.Post.CreatedAt.ToString("MMMM d, yyyy")</span>
+            <span aria-hidden="true">·</span>
+            <span>@Model.ReadingMinutes min read</span>
+        </div>
+    </header>
+
+    @if (!string.IsNullOrEmpty(Model.Post.CoverImage))
+    {
+        <div class="article-cover">
+            <img src="@Model.Post.CoverImage" alt="@Model.Post.Title" />
+        </div>
+    }
+
+    <div class="article-body-wrap">
+        <div class="blog-prose js-article-body">@Html.Raw(sanitizedBody)</div>
+
+        @if (Model.Post.Tags != null && Model.Post.Tags.Count > 0)
+        {
+            <div class="article-tags">
+                @foreach (var tag in Model.Post.Tags)
+                {
+                    <span class="article-tag">#@tag</span>
+                }
+            </div>
+        }
+    </div>
+
+    @if (Model.Related.Count > 0)
+    {
+        <div class="related-wrap">
+            <div class="container py-5" style="max-width: 60rem;">
+                <h2 class="related-title">More in @BlogHelpers.CategoryLabel(Model.Post.Category)</h2>
+                <div class="row row-cols-1 row-cols-sm-3 g-4">
+                    @foreach (var r in Model.Related)
+                    {
+                        <div class="col">
+                            <a href="/blog/@r.Slug" class="post-card text-decoration-none text-body d-block">
+                                <div class="post-card-cover">
+                                    @if (!string.IsNullOrEmpty(r.CoverImage))
+                                    {
+                                        <img src="@r.CoverImage" alt="@r.Title" />
+                                    }
+                                </div>
+                                <h3 class="post-card-title mt-3" style="font-size:1rem;">@r.Title</h3>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</article>

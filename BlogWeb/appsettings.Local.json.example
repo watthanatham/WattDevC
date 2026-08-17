@@ -1,0 +1,11 @@
+{
+  "ConnectionStrings": {
+    "Default": "Host=<pooler-host>;Port=6543;Database=postgres;Username=<user>;Password=<password>;SSL Mode=Require;Trust Server Certificate=true;No Reset On Close=true;Max Auto Prepare=0",
+    "Direct": "Host=<direct-host>;Port=5432;Database=postgres;Username=postgres;Password=<password>;SSL Mode=Require;Trust Server Certificate=true;No Reset On Close=true;Max Auto Prepare=0"
+  },
+  "Supabase": {
+    "Url": "https://<project-ref>.supabase.co",
+    "AnonKey": "<anon-key>",
+    "Bucket": "media"
+  }
+}

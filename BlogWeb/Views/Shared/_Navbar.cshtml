@@ -1,0 +1,75 @@
+@{
+    var path = Context.Request.Path.Value ?? "/";
+    Func<string, bool> isActive = href => href == "/" ? path == "/" : path.StartsWith(href, StringComparison.OrdinalIgnoreCase);
+    var links = new (string Href, string Formal, string Game)[]
+    {
+        ("/", "Home", "HOME"),
+        ("/blog", "Blog", "BLOG"),
+    };
+}
+
+<!-- Formal navbar -->
+<header class="formal-only sticky-top border-bottom nav-formal">
+    <div class="container-md d-flex align-items-center justify-content-between py-3">
+        <a href="/" class="fw-bold fs-6 text-decoration-none text-body">WATT.DEV</a>
+
+        <nav class="d-none d-sm-flex align-items-center gap-1">
+            @foreach (var link in links)
+            {
+                <a href="@link.Href" class="nav-pill @(isActive(link.Href) ? "nav-pill-active" : "")">@link.Formal</a>
+            }
+            <button type="button" class="js-mode-toggle mode-btn-formal">🕹️ INSERT COIN</button>
+            <button type="button" class="js-theme-toggle theme-btn-formal" aria-label="Toggle dark mode">
+                <span class="js-theme-icon">☀</span>
+            </button>
+        </nav>
+
+        <div class="d-flex d-sm-none align-items-center gap-2">
+            <button type="button" class="js-mode-toggle mode-btn-formal">🕹️</button>
+            <button type="button" class="js-theme-toggle theme-btn-formal" aria-label="Toggle dark mode">
+                <span class="js-theme-icon">☀</span>
+            </button>
+            <button type="button" class="js-nav-toggle nav-burger" data-target="#formalMobileNav" aria-label="Toggle menu">☰</button>
+        </div>
+    </div>
+    <nav id="formalMobileNav" class="d-sm-none d-none flex-column border-top px-3 py-2">
+        @foreach (var link in links)
+        {
+            <a href="@link.Href" class="d-block rounded px-2 py-2 text-decoration-none text-body">@link.Formal</a>
+        }
+    </nav>
+</header>
+
+<!-- Game (pixel) navbar -->
+<header class="game-only sticky-top pixel-panel nav-game">
+    <div class="container-md d-flex align-items-center justify-content-between py-3">
+        <a href="/" class="font-pixel fs-6 text-decoration-none text-body">WATT<span style="color:var(--magic)">.</span>DEV</a>
+
+        <nav class="d-none d-sm-flex align-items-center gap-2">
+            @foreach (var link in links)
+            {
+                <a href="@link.Href" class="font-pixel nav-pixel-link @(isActive(link.Href) ? "nav-pixel-active" : "")">
+                    @if (isActive(link.Href)) { <text>▸ </text> }@link.Game
+                </a>
+            }
+            <button type="button" class="js-mode-toggle pixel-btn mode-btn-game">💼 FORMAL MODE</button>
+            <button type="button" class="js-theme-toggle pixel-panel-sm theme-btn-game" aria-label="Toggle dark mode">
+                <span class="font-pixel js-theme-icon">☀</span>
+            </button>
+        </nav>
+
+        <div class="d-flex d-sm-none align-items-center gap-2">
+            <button type="button" class="js-mode-toggle pixel-btn mode-btn-game">💼</button>
+            <button type="button" class="js-theme-toggle pixel-panel-sm theme-btn-game" aria-label="Toggle dark mode">
+                <span class="font-pixel js-theme-icon">☀</span>
+            </button>
+            <button type="button" class="js-nav-toggle pixel-panel-sm nav-burger-game" data-target="#gameMobileNav" aria-label="Toggle menu">≡</button>
+        </div>
+    </div>
+    <nav id="gameMobileNav" class="d-sm-none d-none flex-column border-top">
+        @foreach (var link in links)
+        {
+            <a href="@link.Href" class="font-pixel d-block px-4 py-3 text-decoration-none text-body border-bottom">@link.Game</a>
+        }
+    </nav>
+</header>

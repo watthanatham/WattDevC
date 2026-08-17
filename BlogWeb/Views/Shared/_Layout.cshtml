@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="th" class="h-100">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] != null ? ViewData["Title"] + " | WATT.DEV" : "WATT.DEV")</title>
+    <meta name="description" content="Portfolio และบล็อกส่วนตัวของ Watthanatham Kruram" />
+
+    <!-- Default theme is light; only go dark if the visitor explicitly chose it
+         before (we do not follow OS prefers-color-scheme) — same rule as the
+         Next.js app's RootLayout inline script, run before first paint. -->
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+                if (localStorage.getItem('mode') === 'game') document.documentElement.setAttribute('data-mode', 'game');
+            } catch (e) {}
+        })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="d-flex flex-column min-vh-100">
+    @await Html.PartialAsync("_Navbar")
+
+    <main class="flex-fill">
+        @RenderBody()
+    </main>
+
+    @await Html.PartialAsync("_Footer")
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

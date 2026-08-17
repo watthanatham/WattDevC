@@ -1,0 +1,31 @@
+@model BlogWeb.Models.DashboardViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "แดชบอร์ด";
+    var stats = new (string Label, int Value)[]
+    {
+        ("บทความทั้งหมด", Model.PostCount),
+        ("เผยแพร่แล้ว", Model.PublishedCount),
+        ("Skills", Model.SkillCount),
+        ("Projects", Model.ProjectCount),
+    };
+}
+
+<h1 class="fw-bold" style="font-size:1.5rem;">แดชบอร์ด</h1>
+
+<div class="row row-cols-2 row-cols-sm-4 g-3 mt-1">
+    @foreach (var s in stats)
+    {
+        <div class="col">
+            <div class="admin-stat-card">
+                <p class="fw-bold mb-0" style="font-size:1.5rem;">@s.Value</p>
+                <p class="text-muted small mt-1 mb-0">@s.Label</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="d-flex gap-2 mt-4">
+    <a href="/admin/posts/new" class="btn-pill-dark">+ เขียนบทความใหม่</a>
+    <a href="/admin/portfolio" class="btn-pill-outline">แก้ไข Portfolio</a>
+</div>

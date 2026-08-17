@@ -1,0 +1,106 @@
+@model BlogWeb.Models.BlogListViewModel
+@{
+    Layout = "_BlogLayout";
+    ViewData["Title"] = "Journal";
+    ViewData["Description"] = "Street, portrait & fashion photography journal.";
+    ViewData["Author"] = Model.Author;
+
+    string Qs(string? page = null, string? cat = null, bool clearCat = false, bool clearPage = false)
+    {
+        var qp = new List<string>();
+        if (!string.IsNullOrEmpty(Model.Search)) qp.Add($"q={Uri.EscapeDataString(Model.Search)}");
+        var effectiveCat = clearCat ? "" : (cat ?? Model.Category);
+        if (!string.IsNullOrEmpty(effectiveCat)) qp.Add($"cat={Uri.EscapeDataString(effectiveCat)}");
+        if (!clearPage && !string.IsNullOrEmpty(page)) qp.Add($"page={page}");
+        return qp.Count > 0 ? "/blog?" + string.Join("&", qp) : "/blog";
+    }
+}
+
+<div class="container" style="max-width: 60rem;">
+<div class="py-5">
+
+    <div class="text-center mb-5">
+        <h1 class="h1-responsive">@Model.Author</h1>
+        @if (!string.IsNullOrEmpty(Model.PenBio))
+        {
+            <p class="text-muted mx-auto mt-2" style="max-width:34rem;">@Model.PenBio</p>
+        }
+    </div>
+
+    <div class="d-flex flex-column align-items-center gap-3 mb-5">
+        <nav class="d-flex flex-wrap justify-content-center gap-1">
+            <a href="@Qs(clearCat: true)" class="chip @(string.IsNullOrEmpty(Model.Category) ? "active" : "")">All</a>
+            @foreach (var c in BlogWeb.Services.BlogHelpers.Categories)
+            {
+                <a href="@Qs(cat: c.Value)" class="chip @(Model.Category == c.Value ? "active" : "")">@c.Label</a>
+            }
+        </nav>
+
+        <form action="/blog" method="get" class="w-100 d-flex justify-content-center">
+            @if (!string.IsNullOrEmpty(Model.Category))
+            {
+                <input type="hidden" name="cat" value="@Model.Category" />
+            }
+            <input type="text" name="q" value="@Model.Search" placeholder="Search…" class="blog-search" />
+        </form>
+    </div>
+
+    @if (Model.Posts.Count == 0)
+    {
+        <p class="text-center text-muted py-5">@((!string.IsNullOrEmpty(Model.Search) || !string.IsNullOrEmpty(Model.Category)) ? "No posts found." : "No posts yet.")</p>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+            @foreach (var post in Model.Posts)
+            {
+                <div class="col">
+                    <a href="/blog/@post.Slug" class="post-card text-decoration-none text-body d-block">
+                        <div class="post-card-cover">
+                            @if (!string.IsNullOrEmpty(post.CoverImage))
+                            {
+                                <img src="@post.CoverImage" alt="@post.Title" />
+                            }
+                            else
+                            {
+                                <div class="post-card-placeholder">@BlogWeb.Services.BlogHelpers.CategoryLabel(post.Category)</div>
+                            }
+                        </div>
+                        <p class="post-card-cat mb-0 mt-3">@BlogWeb.Services.BlogHelpers.CategoryLabel(post.Category)</p>
+                        <h2 class="post-card-title">@post.Title</h2>
+                        @if (!string.IsNullOrEmpty(post.Excerpt))
+                        {
+                            <p class="post-card-excerpt">@post.Excerpt</p>
+                        }
+                        <p class="post-card-date">@post.CreatedAt.ToString("MMM d, yyyy")</p>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.TotalPages > 1)
+    {
+        <div class="d-flex justify-content-center gap-4 mt-5 small">
+            @if (Model.Page > 1)
+            {
+                <a href="@Qs(page: (Model.Page - 1).ToString())" class="pagination-link">← Newer</a>
+            }
+            else
+            {
+                <span class="pagination-disabled">← Newer</span>
+            }
+            <span class="text-muted">@Model.Page / @Model.TotalPages</span>
+            @if (Model.Page < Model.TotalPages)
+            {
+                <a href="@Qs(page: (Model.Page + 1).ToString())" class="pagination-link">Older →</a>
+            }
+            else
+            {
+                <span class="pagination-disabled">Older →</span>
+            }
+        </div>
+    }
+
+</div>
+</div>

@@ -1,0 +1,52 @@
+@*
+    Shared field set for both add and edit experience forms — ported from
+    ExperienceFields in experience-manager.tsx.
+    Model: BlogWeb.Models.Experience? (null for the "add" form)
+*@
+@model BlogWeb.Models.Experience
+@{
+    var isCurrent = Model?.EndDate == null && Model != null;
+    string ToMonthValue(DateTime? d) => d.HasValue ? d.Value.ToString("yyyy-MM") : "";
+    var typeLabels = new (string Value, string Label)[]
+    {
+        ("WORK", "งานประจำ"), ("FREELANCE", "Freelance"), ("EDUCATION", "การศึกษา/อบรม"),
+    };
+}
+<input type="text" name="Role" placeholder="ตำแหน่ง เช่น Full-stack Developer" required value="@Model?.Role" class="form-control-admin" />
+<input type="text" name="Company" placeholder="บริษัท" required value="@Model?.Company" class="form-control-admin" />
+
+<select name="Type" class="form-control-admin">
+    @foreach (var t in typeLabels)
+    {
+        <option value="@t.Value" selected="@((Model?.Type ?? "WORK") == t.Value)">@t.Label</option>
+    }
+</select>
+
+<label class="d-flex align-items-center gap-2 small">
+    <input type="checkbox" name="IsCurrent" value="true" class="js-exp-current" checked="@isCurrent" />
+    ทำอยู่ปัจจุบัน
+</label>
+
+<label class="small">
+    <span class="d-block mb-1 text-muted" style="font-size:0.75rem;">เริ่มงาน</span>
+    <input type="month" name="StartDate" required value="@ToMonthValue(Model?.StartDate)" class="form-control-admin" />
+</label>
+
+<label class="small">
+    <span class="d-block mb-1 text-muted" style="font-size:0.75rem;">สิ้นสุด</span>
+    <input type="month" name="EndDate" class="js-exp-enddate form-control-admin" value="@ToMonthValue(Model?.EndDate)" disabled="@isCurrent" />
+</label>
+
+<div style="grid-column:1/-1;">
+    <label class="form-label-admin">สรุปบทบาท <span class="fw-normal text-muted">(ไม่บังคับ)</span></label>
+    <p class="small text-muted mb-1">ข้อความสั้นๆ 1–2 บรรทัด — ถ้าจะใส่เป็นข้อๆ ให้ใช้ช่อง "สิ่งที่ทำ / ผลงาน" ด้านล่างแทน</p>
+    <textarea name="Summary" placeholder="เช่น ดูแลระบบภายในของฝ่ายขาย ตั้งแต่เก็บ requirement จนถึง deploy" rows="4" class="form-control-admin" style="white-space:pre-line;">@Model?.Summary</textarea>
+</div>
+
+<div style="grid-column:1/-1;">
+    <label class="form-label-admin">สิ่งที่ทำ / ผลงาน</label>
+    <p class="small text-muted mb-1">บรรทัดละ 1 ข้อ → แสดงเป็น bullet บนเว็บ<br />เขียนให้วัดผลได้จะดีที่สุด เช่น "ลดเวลาโหลดจาก 5s เหลือ 1.2s"</p>
+    <textarea name="Highlights" placeholder="Developed and maintained internal business applications." rows="4" class="form-control-admin">@Model?.Highlights</textarea>
+</div>
+
+<input type="text" name="Tech" placeholder="เทคโนโลยีที่ใช้ คั่นด้วย , เช่น React, Node.js, PostgreSQL" value="@Model?.Tech" class="form-control-admin" style="grid-column:1/-1;" />

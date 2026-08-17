@@ -1,0 +1,47 @@
+@model List<BlogWeb.Models.Post>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "จัดการบล็อก";
+}
+
+<div class="d-flex align-items-center justify-content-between">
+    <h1 class="fw-bold" style="font-size:1.5rem;">จัดการบล็อก</h1>
+    <a href="/admin/posts/new" class="btn-pill-dark">+ เขียนใหม่</a>
+</div>
+
+<div class="admin-card p-0 mt-4">
+    @if (Model.Count == 0)
+    {
+        <p class="text-center text-muted py-5 mb-0">ยังไม่มีบทความ</p>
+    }
+    else
+    {
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var post = Model[i];
+            <div class="d-flex align-items-center justify-content-between gap-3 px-4 py-3 @(i > 0 ? "border-top" : "")" style="border-color:#e4e4e7;">
+                <div class="text-truncate">
+                    <p class="fw-medium mb-0 text-truncate">@post.Title</p>
+                    <p class="small text-muted mt-1 mb-0">
+                        @if (post.Published)
+                        {
+                            <span style="color:#10b981;">เผยแพร่แล้ว</span>
+                        }
+                        else
+                        {
+                            <span>ฉบับร่าง</span>
+                        }
+                        &nbsp;·&nbsp;@post.UpdatedAt.ToString("dd/MM/yyyy")
+                    </p>
+                </div>
+                <div class="d-flex flex-shrink-0 align-items-center gap-3 small">
+                    <a href="/admin/posts/@post.Id/edit" class="fw-medium text-indigo text-decoration-none">แก้ไข</a>
+                    <form method="post" action="/admin/posts/@post.Id/delete" class="js-confirm-form" data-confirm='ลบบทความ "@post.Title" ใช่หรือไม่?'>
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-link p-0 fw-medium text-danger text-decoration-none">ลบ</button>
+                    </form>
+                </div>
+            </div>
+        }
+    }
+</div>

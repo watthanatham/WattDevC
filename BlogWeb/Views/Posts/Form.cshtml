@@ -1,0 +1,75 @@
+@model BlogWeb.Models.PostFormViewModel
+@using BlogWeb.Services
+@{
+    Layout = "_AdminLayout";
+    var isEdit = Model.Id.HasValue;
+    ViewData["Title"] = isEdit ? "แก้ไขบทความ" : "เขียนบทความใหม่";
+    var action = isEdit ? $"/admin/posts/{Model.Id}/edit" : "/admin/posts/new";
+    var submitLabel = isEdit ? "บันทึกการแก้ไข" : "สร้างบทความ";
+}
+
+<h1 class="fw-bold" style="font-size:1.5rem;">@ViewData["Title"]</h1>
+
+<form method="post" action="@action" class="mt-4 d-flex flex-column gap-4">
+    @Html.AntiForgeryToken()
+
+    <div>
+        <label class="form-label-admin">ชื่อเรื่อง</label>
+        <input type="text" name="Title" value="@Model.Title" required class="form-control-admin" />
+    </div>
+
+    <div>
+        <label class="form-label-admin">เกริ่น (excerpt)</label>
+        <p class="small text-muted mb-1">สรุปสั้นๆ 1–2 ประโยค แสดงบนการ์ดหน้า blog และใช้เป็น description</p>
+        <textarea name="Excerpt" rows="2" class="form-control-admin">@Model.Excerpt</textarea>
+    </div>
+
+    <div class="d-flex flex-wrap gap-4">
+        <div class="flex-fill">
+            <label class="form-label-admin">หมวดหมู่</label>
+            <select name="Category" class="form-control-admin" style="max-width:16rem;">
+                @foreach (var c in BlogHelpers.Categories)
+                {
+                    <option value="@c.Value" selected="@(Model.Category == c.Value)">@c.Label</option>
+                }
+            </select>
+        </div>
+        <div class="d-flex align-items-end pb-2">
+            <label class="d-flex align-items-center gap-2 small fw-medium">
+                <input type="checkbox" name="Published" value="true" checked="@Model.Published" />
+                เผยแพร่
+            </label>
+        </div>
+    </div>
+
+    <div>
+        <label class="form-label-admin">แท็ก</label>
+        <p class="small text-muted mb-1">คั่นด้วย , เช่น bangkok, 35mm, bw</p>
+        <input type="text" name="Tags" value="@Model.Tags" placeholder="bangkok, 35mm, bw" class="form-control-admin" />
+    </div>
+
+    <div>
+        <label class="form-label-admin">รูปปก @(!string.IsNullOrEmpty(Model.CoverImage) ? "(อัปโหลดใหม่เพื่อแทนที่รูปเดิม)" : "")</label>
+        @await Html.PartialAsync("_UploadField", ("CoverImage", "posts", (string?)Model.CoverImage, "image"))
+    </div>
+
+    <div>
+        <label class="form-label-admin">เนื้อหา</label>
+        <textarea name="Body" class="js-post-editor" style="display:none;">@Html.Raw(Model.Body)</textarea>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Error))
+    {
+        <p class="text-danger small mb-0">@Model.Error</p>
+    }
+
+    <button type="submit" class="btn-pill-dark border-0" style="width:fit-content;">@submitLabel</button>
+</form>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.css">
+}
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.js"></script>
+    <script src="~/js/admin-post-editor.js" asp-append-version="true"></script>
+}
