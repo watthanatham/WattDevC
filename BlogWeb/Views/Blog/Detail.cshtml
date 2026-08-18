@@ -9,6 +9,10 @@
 }
 
 <article>
+    <div style="max-width: 42rem; margin: 0 auto; padding: 1.5rem 1.5rem 0;">
+        <a href="/blog" class="blog-back-link">← All posts</a>
+    </div>
+
     <header class="article-header">
         <a href="/blog?cat=@Model.Post.Category" class="article-cat-link">@BlogHelpers.CategoryLabel(Model.Post.Category)</a>
         <h1 class="article-title">@Model.Post.Title</h1>
