@@ -24,6 +24,10 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <!-- Reused here only for .post-card (the "From the blog" preview grid) —
+         .blog-body/.article-*/etc. are scoped to blog.css's own classes and
+         inert on this page. -->
+    <link rel="stylesheet" href="~/css/blog.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="d-flex flex-column min-vh-100">

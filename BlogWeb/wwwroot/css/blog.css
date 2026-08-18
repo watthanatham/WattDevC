@@ -21,6 +21,11 @@ html.dark .blog-header { border-color: #18181b; }
 
 .blog-back-link { font-size: 0.875rem; color: #71717a; text-decoration: none; }
 .blog-back-link:hover { color: inherit; }
+html.dark .blog-back-link { color: #a1a1aa; }
+
+/* Bootstrap's .text-muted/.text-body hardcode --bs-*-color with !important,
+   which never tracks html.dark since we don't set data-bs-theme. */
+.blog-body .text-muted { color: var(--muted) !important; }
 
 .blog-footer { border-top: 1px solid #f4f4f5; padding: 2.5rem 0; color: #a1a1aa; }
 html.dark .blog-footer { border-color: #18181b; }
@@ -29,6 +34,7 @@ html.dark .blog-footer { border-color: #18181b; }
 .chip { border-radius: 9999px; padding: 0.375rem 1rem; font-size: 0.875rem; font-weight: 500; text-decoration: none; color: #71717a; }
 .chip:hover { background: #f4f4f5; color: #71717a; }
 .chip.active, .chip.active:hover { background: #18181b; color: #fff; }
+html.dark .chip { color: #a1a1aa; }
 html.dark .chip:hover { background: #18181b; }
 html.dark .chip.active, html.dark .chip.active:hover { background: #f4f4f5; color: #18181b; }
 
@@ -59,14 +65,18 @@ html.dark .post-card-cover { background: #18181b; }
 .post-card-cover:hover img { transform: scale(1.05); }
 .post-card-placeholder { display: flex; height: 100%; align-items: center; justify-content: center; color: #d4d4d8; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.15em; }
 
+.post-card { color: inherit; }
 .post-card-cat { font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: #a1a1aa; }
 .post-card-title { margin-top: 0.375rem; font-size: 1.125rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.35; }
 a.post-card:hover .post-card-title { color: #71717a; }
+html.dark a.post-card:hover .post-card-title { color: #d4d4d8; }
 .post-card-excerpt { margin-top: 0.375rem; font-size: 0.875rem; color: #71717a; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+html.dark .post-card-excerpt { color: #a1a1aa; }
 .post-card-date { margin-top: 0.5rem; font-size: 0.75rem; color: #a1a1aa; }
 
 .pagination-link { color: #71717a; text-decoration: none; }
 .pagination-link:hover { color: #18181b; }
+html.dark .pagination-link { color: #a1a1aa; }
 html.dark .pagination-link:hover { color: #f4f4f5; }
 .pagination-disabled { color: #d4d4d8; }
 html.dark .pagination-disabled { color: #3f3f46; }

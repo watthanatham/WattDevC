@@ -55,8 +55,7 @@
               "RelativeToolTip": "BlogWeb\\appsettings.Local.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAB8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-08-18T12:57:07.339Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-18T12:57:07.339Z"
             },
             {
               "$type": "Document",
@@ -68,8 +67,7 @@
               "RelativeToolTip": "BlogWeb\\Views\\Shared\\_Footer.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-18T12:40:36.578Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-18T12:40:36.578Z"
             },
             {
               "$type": "Document",
@@ -81,8 +79,7 @@
               "RelativeToolTip": "BlogWeb\\Views\\Home\\Index.cshtml",
               "ViewState": "AgIAAC0AAAAAAAAAAAAUwEMAAACFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-18T12:17:35.52Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-18T12:17:35.52Z"
             },
             {
               "$type": "Document",
@@ -94,8 +91,7 @@
               "RelativeToolTip": "BlogWeb\\Controllers\\HomeController.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAgwBsAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-17T12:54:19.049Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-17T12:54:19.049Z"
             }
           ]
         }

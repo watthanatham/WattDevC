@@ -65,7 +65,7 @@
                     @foreach (var r in Model.Related)
                     {
                         <div class="col">
-                            <a href="/blog/@r.Slug" class="post-card text-decoration-none text-body d-block">
+                            <a href="/blog/@r.Slug" class="post-card text-decoration-none d-block">
                                 <div class="post-card-cover">
                                     @if (!string.IsNullOrEmpty(r.CoverImage))
                                     {

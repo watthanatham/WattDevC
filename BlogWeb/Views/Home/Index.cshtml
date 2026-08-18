@@ -231,16 +231,29 @@
     {
         <section class="reveal">
             <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">From the blog</h2>
-            <div class="d-flex flex-column gap-2">
+            <div class="row row-cols-1 row-cols-sm-3 g-4">
                 @foreach (var post in Model.LatestPosts)
                 {
-                    <a href="/blog/@post.Slug" class="card-formal d-flex justify-content-between align-items-center gap-3 px-3 py-2 text-decoration-none text-body">
-                        <span class="small fw-medium">@post.Title</span>
-                        <span class="small text-zinc-500 flex-shrink-0">@post.CreatedAt.ToString("dd MMM yyyy")</span>
-                    </a>
+                    <div class="col">
+                        <a href="/blog/@post.Slug" class="post-card text-decoration-none d-block">
+                            <div class="post-card-cover">
+                                @if (!string.IsNullOrEmpty(post.CoverImage))
+                                {
+                                    <img src="@post.CoverImage" alt="@post.Title" />
+                                }
+                                else
+                                {
+                                    <div class="post-card-placeholder">@BlogWeb.Services.BlogHelpers.CategoryLabel(post.Category)</div>
+                                }
+                            </div>
+                            <p class="post-card-cat mb-0 mt-2">@BlogWeb.Services.BlogHelpers.CategoryLabel(post.Category)</p>
+                            <h3 class="post-card-title" style="font-size:1rem;">@post.Title</h3>
+                            <p class="post-card-date">@post.CreatedAt.ToString("MMM d, yyyy")</p>
+                        </a>
+                    </div>
                 }
             </div>
-            <a href="/blog" class="d-inline-block mt-3 small fw-medium text-indigo text-decoration-none">All posts →</a>
+            <a href="/blog" class="d-inline-block mt-4 small fw-medium text-indigo text-decoration-none">All posts →</a>
         </section>
     }
 
