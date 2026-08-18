@@ -37,16 +37,18 @@
 
     <!-- Hero -->
     <section class="d-flex flex-column flex-sm-row align-items-center align-items-sm-start gap-4 text-center text-sm-start">
-        @if (!string.IsNullOrEmpty(Model.Profile?.AvatarUrl))
-        {
-            <img src="@Model.Profile.AvatarUrl" alt="@name" class="avatar-hero" />
-        }
-        else
-        {
-            <div class="avatar-hero-fallback">@name.Substring(0, 1)</div>
-        }
-        <div class="flex-fill">
-            <h1 class="h1-responsive">@name</h1>
+        <div class="avatar-hero-wrap reveal">
+            @if (!string.IsNullOrEmpty(Model.Profile?.AvatarUrl))
+            {
+                <img src="@Model.Profile.AvatarUrl" alt="@name" class="avatar-hero" />
+            }
+            else
+            {
+                <div class="avatar-hero-fallback">@name.Substring(0, 1)</div>
+            }
+        </div>
+        <div class="flex-fill reveal" style="transition-delay:120ms">
+            <h1 class="h1-responsive hero-name-gradient">@name</h1>
             <p class="fw-medium text-indigo mt-1 mb-0" style="font-size:1.125rem;">@role</p>
             <div class="d-flex flex-wrap justify-content-center justify-content-sm-start gap-3 mt-2 small text-zinc-500">
                 @if (Model.Years > 0) { <span>@Model.Years+ years of experience</span> }
@@ -79,14 +81,14 @@
 
     @if (!string.IsNullOrEmpty(Model.Profile?.Bio))
     {
-        <section>
+        <section class="reveal">
             <h2 class="fw-bold mb-3" style="font-size:1.25rem; letter-spacing:-0.01em;">About</h2>
             <p class="text-zinc-600" style="white-space:pre-line;">@Model.Profile.Bio</p>
         </section>
     }
 
     <!-- Work Experience -->
-    <section>
+    <section class="reveal">
         <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">Work Experience</h2>
         @if (Model.Experiences.Count == 0)
         {
@@ -135,18 +137,26 @@
     <!-- Skills -->
     @if (Model.Skills.Count > 0)
     {
-        <section>
+        <section class="reveal">
             <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">Skills</h2>
             <div class="row g-3">
                 @foreach (var cat in presentCategories)
                 {
                     <div class="col-12 col-sm-6">
                         <div class="card-formal p-3 h-100">
-                            <p class="text-uppercase fw-semibold text-zinc-500 mb-2" style="font-size:0.75rem; letter-spacing:0.03em;">@categoryLabel[cat]</p>
-                            <div class="d-flex flex-wrap gap-2">
+                            <p class="text-uppercase fw-semibold text-zinc-500 mb-3" style="font-size:0.75rem; letter-spacing:0.03em;">@categoryLabel[cat]</p>
+                            <div class="d-flex flex-column gap-3">
                                 @foreach (var s in skillsByCategory[cat])
                                 {
-                                    <span class="skill-pill"><img src="@s.IconUrl" alt="" class="skill-icon" />@s.Name</span>
+                                    <div class="skill-bar">
+                                        <div class="d-flex align-items-center justify-content-between small mb-1">
+                                            <span class="d-flex align-items-center gap-2"><img src="@s.IconUrl" alt="" class="skill-icon" />@s.Name</span>
+                                            <span class="text-zinc-500">@s.Level%</span>
+                                        </div>
+                                        <div class="skill-bar-track">
+                                            <div class="skill-bar-fill" style="--level:@(s.Level)%"></div>
+                                        </div>
+                                    </div>
                                 }
                             </div>
                         </div>
@@ -159,7 +169,7 @@
     <!-- Case Studies -->
     @if (Model.CaseStudies.Count > 0)
     {
-        <section>
+        <section class="reveal">
             <h2 class="fw-bold mb-1" style="font-size:1.25rem; letter-spacing:-0.01em;">Case Studies</h2>
             <p class="small text-zinc-500 mb-4">Selected problems and how they were solved.</p>
             <div class="d-flex flex-column gap-3">
@@ -190,7 +200,7 @@
     <!-- Projects -->
     @if (Model.Projects.Count > 0)
     {
-        <section>
+        <section class="reveal">
             <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">Projects</h2>
             <div class="row g-3">
                 @foreach (var p in Model.Projects)
@@ -219,7 +229,7 @@
     <!-- Blog -->
     @if (Model.LatestPosts.Count > 0)
     {
-        <section>
+        <section class="reveal">
             <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">From the blog</h2>
             <div class="d-flex flex-column gap-2">
                 @foreach (var post in Model.LatestPosts)
@@ -237,7 +247,7 @@
     <!-- Contact -->
     @if (!string.IsNullOrEmpty(Model.Profile?.Email) || !string.IsNullOrEmpty(Model.Profile?.Github) || !string.IsNullOrEmpty(Model.Profile?.Linkedin))
     {
-        <section class="card-formal text-center p-4 p-sm-5">
+        <section class="card-formal text-center p-4 p-sm-5 reveal">
             <h2 class="fw-bold" style="font-size:1.25rem;">Let's work together</h2>
             <p class="small text-zinc-500 mt-2">Open to full-time and freelance opportunities.</p>
             <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">

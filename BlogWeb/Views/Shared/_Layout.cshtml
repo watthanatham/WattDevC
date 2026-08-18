@@ -27,6 +27,8 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="d-flex flex-column min-vh-100">
+    <div id="modeTransitionOverlay" class="mode-transition-overlay"><span class="blink">LOADING…</span></div>
+
     @await Html.PartialAsync("_Navbar")
 
     <main class="flex-fill">

@@ -1,9 +1,21 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "F:\\Source code\\Blog-web\\aspnet\\",
+  "WorkspaceRootPath": "F:\\Source code\\Web Blog C#\\aspnet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|f:\\source code\\blog-web\\aspnet\\blogweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|f:\\source code\\web blog c#\\aspnet\\blogweb\\appsettings.local.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|solutionrelative:blogweb\\appsettings.local.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|f:\\source code\\web blog c#\\aspnet\\blogweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|solutionrelative:blogweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|f:\\source code\\web blog c#\\aspnet\\blogweb\\views\\shared\\_footer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|solutionrelative:blogweb\\views\\shared\\_footer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|f:\\source code\\web blog c#\\aspnet\\blogweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|solutionrelative:blogweb\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -19,10 +31,49 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "appsettings.Local.json",
+              "DocumentMoniker": "F:\\Source code\\Web Blog C#\\aspnet\\BlogWeb\\appsettings.Local.json",
+              "RelativeDocumentMoniker": "BlogWeb\\appsettings.Local.json",
+              "ToolTip": "F:\\Source code\\Web Blog C#\\aspnet\\BlogWeb\\appsettings.Local.json",
+              "RelativeToolTip": "BlogWeb\\appsettings.Local.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAB8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-08-18T12:57:07.339Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "_Footer.cshtml",
+              "DocumentMoniker": "F:\\Source code\\Web Blog C#\\aspnet\\BlogWeb\\Views\\Shared\\_Footer.cshtml",
+              "RelativeDocumentMoniker": "BlogWeb\\Views\\Shared\\_Footer.cshtml",
+              "ToolTip": "F:\\Source code\\Web Blog C#\\aspnet\\BlogWeb\\Views\\Shared\\_Footer.cshtml",
+              "RelativeToolTip": "BlogWeb\\Views\\Shared\\_Footer.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-18T12:40:36.578Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "F:\\Source code\\Web Blog C#\\aspnet\\BlogWeb\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "BlogWeb\\Views\\Home\\Index.cshtml",
+              "ToolTip": "F:\\Source code\\Web Blog C#\\aspnet\\BlogWeb\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "BlogWeb\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAACwAAAAAAAAAAAAUwEEAAACFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-18T12:17:35.52Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "HomeController.cs",
-              "DocumentMoniker": "F:\\Source code\\Blog-web\\aspnet\\BlogWeb\\Controllers\\HomeController.cs",
+              "DocumentMoniker": "F:\\Source code\\Web Blog C#\\aspnet\\BlogWeb\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "BlogWeb\\Controllers\\HomeController.cs",
-              "ToolTip": "F:\\Source code\\Blog-web\\aspnet\\BlogWeb\\Controllers\\HomeController.cs",
+              "ToolTip": "F:\\Source code\\Web Blog C#\\aspnet\\BlogWeb\\Controllers\\HomeController.cs",
               "RelativeToolTip": "BlogWeb\\Controllers\\HomeController.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAgwBsAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",

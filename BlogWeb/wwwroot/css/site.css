@@ -158,6 +158,26 @@ html[data-mode="game"] .game-only.d-flex-game { display: flex; }
   .blink, .sprite-bob { animation: none; }
 }
 
+/* ---- Theme / mode switch transition flash ---- */
+.mode-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+.mode-transition-overlay.is-active { opacity: 1; }
+.mode-transition-overlay span {
+  font-family: var(--font-pixel), monospace;
+  font-size: 12px;
+  color: var(--foreground);
+}
+
 /* ---- Markdown body (game-mode prose, kept pixel-styled) ---- */
 .prose-content h1,
 .prose-content h2,
@@ -249,6 +269,10 @@ html[data-mode="game"] .game-only.d-flex-game { display: flex; }
 .editor-body [data-gallery] img { margin: 0; height: 100%; width: 100%; border-radius: 0.5rem; object-fit: cover; aspect-ratio: 1 / 1; }
 
 /* ---- Navbar / Footer (site chrome), ported from navbar.tsx / footer.tsx ---- */
+/* text-body tracks Bootstrap's --bs-body-color, which never flips since we
+   don't set data-bs-theme; --foreground already flips with html.dark. */
+.nav-brand { color: var(--foreground); }
+
 .nav-formal {
   z-index: 1030;
   border-color: #e4e4e7;
@@ -349,6 +373,29 @@ html.dark .footer-formal { border-color: #27272a; background: #000; }
   .h1-pixel-responsive { font-size: 20px; }
 }
 
+/* ---- Scroll reveal (formal mode only — game mode stays static/retro) ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* Home hero name — gradient overrides h1-responsive's font-size/color */
+.hero-name-gradient {
+  font-size: 2.25rem;
+  background: linear-gradient(135deg, #6366f1, var(--magic));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@media (min-width: 640px) {
+  .hero-name-gradient { font-size: 3rem; }
+}
+
 /* ================================================================
  * Home page — formal mode (zinc/indigo palette approximating Tailwind)
  * ================================================================ */
@@ -362,8 +409,11 @@ html.dark .text-zinc-500 { color: #a1a1aa; }
   border: 1px solid #e4e4e7;
   background: #fff;
   border-radius: 1rem;
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
 html.dark .card-formal { border-color: #27272a; background: #18181b; }
+.card-formal:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); }
+html.dark .card-formal:hover { box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); }
 
 .btn-pill-dark {
   display: inline-block;
@@ -394,24 +444,41 @@ html.dark .btn-pill-dark:hover { background: #e4e4e7; }
 .btn-pill-outline:hover { border-color: #818cf8; color: #6366f1; }
 html.dark .btn-pill-outline { border-color: #3f3f46; }
 
+.avatar-hero-wrap {
+  flex-shrink: 0;
+  width: 9rem;
+  height: 9rem;
+  padding: 4px;
+  border-radius: 1.25rem;
+  background: conic-gradient(from 0deg, #6366f1, var(--magic), #3b82f6, #6366f1);
+  animation: spin-ring 8s linear infinite;
+}
+@media (min-width: 640px) {
+  .avatar-hero-wrap { width: 12rem; height: 12rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .avatar-hero-wrap { animation: none; }
+}
+@keyframes spin-ring {
+  to { transform: rotate(360deg); }
+}
+
 .avatar-hero {
-  width: 8rem;
-  height: 8rem;
+  display: block;
+  width: 100%;
+  height: 100%;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-  flex-shrink: 0;
   object-fit: cover;
 }
 .avatar-hero-fallback {
-  width: 8rem;
-  height: 8rem;
+  width: 100%;
+  height: 100%;
   border-radius: 1rem;
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.875rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #fff;
   background: linear-gradient(to bottom right, #6366f1, #3b82f6);
@@ -432,9 +499,36 @@ html.dark .tag-pill { background: #27272a; color: #d4d4d8; }
 html.dark .skill-pill { border-color: #3f3f46; }
 .skill-icon { width: 1.25rem; height: 1.25rem; object-fit: contain; }
 
-.project-card-formal { display: flex; flex-direction: column; overflow: hidden; border-radius: 1rem; border: 1px solid #e4e4e7; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.skill-bar-track { height: 0.5rem; border-radius: 9999px; background: color-mix(in srgb, var(--foreground) 10%, transparent); overflow: hidden; }
+.skill-bar-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #6366f1, var(--magic));
+  transition: width 800ms ease;
+}
+.skill-bar-fill.is-visible { width: var(--level); }
+@media (prefers-reduced-motion: reduce) {
+  .skill-bar-fill { transition: none; width: var(--level); }
+}
+
+.project-card-formal {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid #e4e4e7;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
 html.dark .project-card-formal { border-color: #27272a; background: #18181b; }
 .project-card-formal img { height: 10rem; width: 100%; object-fit: cover; }
+.project-card-formal:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); }
+html.dark .project-card-formal:hover { box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); }
+@media (prefers-reduced-motion: reduce) {
+  .card-formal:hover, .project-card-formal:hover { transform: none; }
+}
 
 .case-study-row { border-left: 2px solid #c7d2fe; padding-left: 0.75rem; }
 html.dark .case-study-row { border-color: #312e81; }

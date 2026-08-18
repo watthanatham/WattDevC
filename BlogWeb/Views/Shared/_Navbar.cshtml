@@ -11,14 +11,14 @@
 <!-- Formal navbar -->
 <header class="formal-only sticky-top border-bottom nav-formal">
     <div class="container-md d-flex align-items-center justify-content-between py-3">
-        <a href="/" class="fw-bold fs-6 text-decoration-none text-body">WATT.DEV</a>
+        <a href="/" class="fw-bold fs-6 text-decoration-none nav-brand">WATT.DEV</a>
 
         <nav class="d-none d-sm-flex align-items-center gap-1">
             @foreach (var link in links)
             {
                 <a href="@link.Href" class="nav-pill @(isActive(link.Href) ? "nav-pill-active" : "")">@link.Formal</a>
             }
-            <button type="button" class="js-mode-toggle mode-btn-formal">🕹️ INSERT COIN</button>
+            <button type="button" class="js-mode-toggle mode-btn-formal">🕹️ 8-BIT MODE</button>
             <button type="button" class="js-theme-toggle theme-btn-formal" aria-label="Toggle dark mode">
                 <span class="js-theme-icon">☀</span>
             </button>
@@ -43,7 +43,7 @@
 <!-- Game (pixel) navbar -->
 <header class="game-only sticky-top pixel-panel nav-game">
     <div class="container-md d-flex align-items-center justify-content-between py-3">
-        <a href="/" class="font-pixel fs-6 text-decoration-none text-body">WATT<span style="color:var(--magic)">.</span>DEV</a>
+        <a href="/" class="font-pixel fs-6 text-decoration-none nav-brand">WATT<span style="color:var(--magic)">.</span>DEV</a>
 
         <nav class="d-none d-sm-flex align-items-center gap-2">
             @foreach (var link in links)

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "blogweb",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "BlogWeb", "--launch-profile", "http"],
+      "port": 5005
+    }
+  ]
+}
