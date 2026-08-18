@@ -8,5 +8,5 @@ RUN dotnet publish BlogWeb/BlogWeb.csproj -c Release -o /app
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app .
-# Railway injects $PORT at runtime; ASP.NET Core needs ASPNETCORE_URLS, not $PORT directly.
+# Render (and Railway) inject $PORT at runtime; ASP.NET Core needs ASPNETCORE_URLS, not $PORT directly.
 CMD ["sh", "-c", "ASPNETCORE_URLS=http://0.0.0.0:$PORT dotnet BlogWeb.dll"]
