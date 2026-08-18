@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // (gitignored, sits next to appsettings.json — see appsettings.Local.json.example).
 // Loaded unconditionally so it works the same way regardless of how
 // ASPNETCORE_ENVIRONMENT ends up set for a given launch method.
-builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: false);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
