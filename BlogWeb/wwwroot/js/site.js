@@ -79,12 +79,11 @@ $(function () {
   renderToggles();
 });
 
-// Scroll reveal for Home (formal mode) — fades/slides sections and fills
-// skill bars in as they enter the viewport. Game mode has no .reveal /
-// .skill-bar-fill elements, so this is a no-op there.
+// Scroll reveal for Home (formal mode) — fades/slides sections in as they
+// enter the viewport. Game mode has no .reveal elements, so this is a no-op there.
 (function () {
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var els = document.querySelectorAll(".reveal, .skill-bar-fill");
+  var els = document.querySelectorAll(".reveal");
   if (!els.length) return;
 
   if (reduceMotion || !("IntersectionObserver" in window)) {

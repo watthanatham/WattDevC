@@ -499,19 +499,6 @@ html.dark .tag-pill { background: #27272a; color: #d4d4d8; }
 html.dark .skill-pill { border-color: #3f3f46; }
 .skill-icon { width: 1.25rem; height: 1.25rem; object-fit: contain; }
 
-.skill-bar-track { height: 0.5rem; border-radius: 9999px; background: color-mix(in srgb, var(--foreground) 10%, transparent); overflow: hidden; }
-.skill-bar-fill {
-  height: 100%;
-  width: 0;
-  border-radius: 9999px;
-  background: linear-gradient(90deg, #6366f1, var(--magic));
-  transition: width 800ms ease;
-}
-.skill-bar-fill.is-visible { width: var(--level); }
-@media (prefers-reduced-motion: reduce) {
-  .skill-bar-fill { transition: none; width: var(--level); }
-}
-
 .project-card-formal {
   display: flex;
   flex-direction: column;

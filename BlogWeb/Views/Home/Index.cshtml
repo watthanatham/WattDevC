@@ -145,18 +145,10 @@
                     <div class="col-12 col-sm-6">
                         <div class="card-formal p-3 h-100">
                             <p class="text-uppercase fw-semibold text-zinc-500 mb-3" style="font-size:0.75rem; letter-spacing:0.03em;">@categoryLabel[cat]</p>
-                            <div class="d-flex flex-column gap-3">
+                            <div class="d-flex flex-wrap gap-2">
                                 @foreach (var s in skillsByCategory[cat])
                                 {
-                                    <div class="skill-bar">
-                                        <div class="d-flex align-items-center justify-content-between small mb-1">
-                                            <span class="d-flex align-items-center gap-2"><img src="@s.IconUrl" alt="" class="skill-icon" />@s.Name</span>
-                                            <span class="text-zinc-500">@s.Level%</span>
-                                        </div>
-                                        <div class="skill-bar-track">
-                                            <div class="skill-bar-fill" style="--level:@(s.Level)%"></div>
-                                        </div>
-                                    </div>
+                                    <span class="skill-pill"><img src="@s.IconUrl" alt="" class="skill-icon" />@s.Name</span>
                                 }
                             </div>
                         </div>
