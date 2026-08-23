@@ -32,7 +32,7 @@
 }
 
 <!-- ============================== FORMAL MODE ============================== -->
-<div class="formal-only container" style="max-width: 48rem;">
+<div class="formal-only container" style="max-width: 64rem;">
 <div class="py-5" style="display:flex; flex-direction:column; gap:4rem;">
 
     <!-- Hero -->
@@ -79,11 +79,47 @@
         </div>
     </section>
 
-    @if (!string.IsNullOrEmpty(Model.Profile?.Bio))
+    <!-- Quick stats -->
+    @if (Model.Years > 0 || questCount > 0 || Model.Projects.Count > 0)
     {
-        <section class="reveal">
-            <h2 class="fw-bold mb-3" style="font-size:1.25rem; letter-spacing:-0.01em;">About</h2>
-            <p class="text-zinc-600" style="white-space:pre-line;">@Model.Profile.Bio</p>
+        <section class="reveal row row-cols-3 g-3">
+            <div class="col"><div class="card-formal p-3 text-center"><p class="fw-bold mb-0" style="font-size:1.5rem;">@(Model.Years > 0 ? Model.Years + "+" : "—")</p><p class="small text-zinc-500 mb-0 mt-1">Years experience</p></div></div>
+            <div class="col"><div class="card-formal p-3 text-center"><p class="fw-bold mb-0" style="font-size:1.5rem;">@questCount</p><p class="small text-zinc-500 mb-0 mt-1">Roles held</p></div></div>
+            <div class="col"><div class="card-formal p-3 text-center"><p class="fw-bold mb-0" style="font-size:1.5rem;">@Model.Projects.Count</p><p class="small text-zinc-500 mb-0 mt-1">Projects shipped</p></div></div>
+        </section>
+    }
+
+    <!-- About + Skills -->
+    @if (!string.IsNullOrEmpty(Model.Profile?.Bio) || Model.Skills.Count > 0)
+    {
+        <section class="reveal row g-4">
+            @if (!string.IsNullOrEmpty(Model.Profile?.Bio))
+            {
+                <div class="col-12 col-lg-7">
+                    <h2 class="fw-bold mb-3" style="font-size:1.25rem; letter-spacing:-0.01em;">About</h2>
+                    <p class="text-zinc-600" style="white-space:pre-line;">@Model.Profile.Bio</p>
+                </div>
+            }
+            @if (Model.Skills.Count > 0)
+            {
+                <div class="col-12 col-lg-5">
+                    <h2 class="fw-bold mb-3" style="font-size:1.25rem; letter-spacing:-0.01em;">Skills</h2>
+                    <div class="d-flex flex-column gap-3">
+                        @foreach (var cat in presentCategories)
+                        {
+                            <div>
+                                <p class="text-uppercase fw-semibold text-zinc-500 mb-2" style="font-size:0.75rem; letter-spacing:0.03em;">@categoryLabel[cat]</p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var s in skillsByCategory[cat])
+                                    {
+                                        <span class="skill-pill"><img src="@s.IconUrl" alt="" class="skill-icon" />@s.Name</span>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
         </section>
     }
 
@@ -134,30 +170,6 @@
         }
     </section>
 
-    <!-- Skills -->
-    @if (Model.Skills.Count > 0)
-    {
-        <section class="reveal">
-            <h2 class="fw-bold mb-4" style="font-size:1.25rem; letter-spacing:-0.01em;">Skills</h2>
-            <div class="row g-3">
-                @foreach (var cat in presentCategories)
-                {
-                    <div class="col-12 col-sm-6">
-                        <div class="card-formal p-3 h-100">
-                            <p class="text-uppercase fw-semibold text-zinc-500 mb-3" style="font-size:0.75rem; letter-spacing:0.03em;">@categoryLabel[cat]</p>
-                            <div class="d-flex flex-wrap gap-2">
-                                @foreach (var s in skillsByCategory[cat])
-                                {
-                                    <span class="skill-pill"><img src="@s.IconUrl" alt="" class="skill-icon" />@s.Name</span>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </section>
-    }
-
     <!-- Case Studies -->
     @if (Model.CaseStudies.Count > 0)
     {
@@ -197,7 +209,7 @@
             <div class="row g-3">
                 @foreach (var p in Model.Projects)
                 {
-                    <div class="col-12 col-sm-6">
+                    <div class="col-12 col-sm-6 col-lg-4">
                         <article class="project-card-formal h-100">
                             @if (!string.IsNullOrEmpty(p.ImageUrl))
                             {
