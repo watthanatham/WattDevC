@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BlogWeb.Data;
@@ -25,6 +25,7 @@ public class DashboardController : Controller
             PublishedCount = await _db.Posts.CountAsync(p => p.Published),
             SkillCount = await _db.Skills.CountAsync(),
             ProjectCount = await _db.Projects.CountAsync(),
+            JobApplicationCount = await _db.JobApplications.CountAsync(),
         };
 
         return View(vm);

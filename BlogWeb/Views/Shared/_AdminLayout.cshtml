@@ -1,10 +1,11 @@
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     var links = new (string Href, string Label)[]
     {
         ("/admin", "แดชบอร์ด"),
         ("/admin/posts", "จัดการบล็อก"),
         ("/admin/portfolio", "จัดการ Portfolio"),
+        ("/admin/jobs", "บันทึกการสมัครงาน"),
     };
     var email = User.Identity?.Name ?? User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
 }
@@ -52,7 +53,7 @@
                     <a href="@link.Href" class="text-nowrap rounded-pill border px-3 py-1 small fw-medium text-decoration-none text-body">@link.Label</a>
                 }
             </nav>
-            <main class="admin-main">
+            <main class="admin-main @(ViewData["MainClass"])">
                 @RenderBody()
             </main>
         </div>

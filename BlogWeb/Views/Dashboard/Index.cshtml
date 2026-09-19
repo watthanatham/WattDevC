@@ -1,4 +1,4 @@
-@model BlogWeb.Models.DashboardViewModel
+﻿@model BlogWeb.Models.DashboardViewModel
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "แดชบอร์ด";
@@ -8,12 +8,13 @@
         ("เผยแพร่แล้ว", Model.PublishedCount),
         ("Skills", Model.SkillCount),
         ("Projects", Model.ProjectCount),
+        ("สมัครงาน", Model.JobApplicationCount),
     };
 }
 
 <h1 class="fw-bold" style="font-size:1.5rem;">แดชบอร์ด</h1>
 
-<div class="row row-cols-2 row-cols-sm-4 g-3 mt-1">
+<div class="row row-cols-2 row-cols-sm-5 g-3 mt-1">
     @foreach (var s in stats)
     {
         <div class="col">
@@ -28,4 +29,5 @@
 <div class="d-flex gap-2 mt-4">
     <a href="/admin/posts/new" class="btn-pill-dark">+ เขียนบทความใหม่</a>
     <a href="/admin/portfolio" class="btn-pill-outline">แก้ไข Portfolio</a>
+    <a href="/admin/jobs" class="btn-pill-outline">บันทึกการสมัครงาน</a>
 </div>

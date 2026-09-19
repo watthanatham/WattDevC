@@ -1,0 +1,46 @@
+@*
+    Shared field set for both the add and edit job-application forms.
+    Model: BlogWeb.Models.JobApplication? (null for the "add" form)
+*@
+@model BlogWeb.Models.JobApplication
+@{
+    // New rows default to today — the common case is logging a job you just applied to.
+    var appliedDate = (Model?.AppliedDate ?? DateOnly.FromDateTime(DateTime.Today)).ToString("yyyy-MM-dd");
+    var status = Model?.Status ?? "APPLIED";
+}
+
+<div>
+    <label class="form-label-admin">บริษัท</label>
+    <input type="text" name="Company" placeholder="เช่น SCB TechX" required value="@Model?.Company" class="form-control-admin" />
+</div>
+
+<div>
+    <label class="form-label-admin">ตำแหน่งที่สมัคร</label>
+    <input type="text" name="Position" placeholder="เช่น Full-stack Developer" required value="@Model?.Position" class="form-control-admin" />
+</div>
+
+<div>
+    <label class="form-label-admin">วันที่สมัคร</label>
+    <input type="date" name="AppliedDate" required value="@appliedDate" class="form-control-admin" />
+</div>
+
+<div>
+    <label class="form-label-admin">สถานะ</label>
+    <select name="Status" class="form-control-admin">
+        @foreach (var s in BlogWeb.Models.JobApplicationStatus.All)
+        {
+            <option value="@s.Value" selected="@(status == s.Value)">@s.Label</option>
+        }
+    </select>
+</div>
+
+<div style="grid-column:1/-1;">
+    <label class="form-label-admin">ลิงก์ประกาศงาน <span class="fw-normal text-muted">(ไม่บังคับ)</span></label>
+    <input type="url" name="Link" placeholder="https://..." value="@Model?.Link" class="form-control-admin" />
+</div>
+
+<div style="grid-column:1/-1;">
+    <label class="form-label-admin">เหตุผล / บันทึก <span class="fw-normal text-muted">(ไม่บังคับ)</span></label>
+    <p class="small text-muted mb-1">เช่น ทำไมถึงสมัครที่นี่ ใครแนะนำมา หรือเหตุผลที่ไม่ผ่าน</p>
+    <textarea name="Reason" rows="3" placeholder="เช่น สนใจทีม backend + ใช้ .NET ตรงสาย / ไม่ผ่านเพราะขอประสบการณ์ 5 ปี" class="form-control-admin">@Model?.Reason</textarea>
+</div>

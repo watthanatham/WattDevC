@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Design tokens + pixel-mode components, ported 1:1 from the Next.js app's
  * globals.css (Tailwind v4 @theme + @apply rules expanded to plain CSS).
  * Bootstrap handles grid/utility classes elsewhere; this file only owns the
@@ -630,4 +630,31 @@ html.dark .btn-admin-primary { background: #fff; color: #18181b; }
 @media (max-width: 575.98px) {
   .admin-sidebar { display: none; }
   .admin-topbar { display: flex; }
+}
+
+/* Job applications table (admin/jobs) — a plain data table, wider than the
+   48rem admin column the form pages use. */
+.admin-main-wide { max-width: 72rem; }
+
+.admin-table { width: 100%; margin-bottom: 0; font-size: 0.875rem; }
+.admin-table th {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e4e4e7;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #71717a;
+  white-space: nowrap;
+}
+.admin-table td { padding: 0.75rem 1rem; border-top: 1px solid #f4f4f5; vertical-align: middle; }
+.admin-table tbody tr:first-child td { border-top: none; }
+html.dark .admin-table th { border-color: #27272a; }
+html.dark .admin-table td { border-color: #27272a; }
+
+.status-badge {
+  display: inline-block;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
 }

@@ -14,6 +14,8 @@ public partial class BlogDbContext : DbContext
 
     public virtual DbSet<Experience> Experiences { get; set; }
 
+    public virtual DbSet<JobApplication> JobApplications { get; set; }
+
     public virtual DbSet<Post> Posts { get; set; }
 
     public virtual DbSet<Profile> Profiles { get; set; }
@@ -52,6 +54,23 @@ public partial class BlogDbContext : DbContext
             entity.Property(e => e.Type)
                 .HasDefaultValueSql("'WORK'::text")
                 .HasColumnName("type");
+        });
+
+        modelBuilder.Entity<JobApplication>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("JobApplication_pkey");
+
+            entity.ToTable("JobApplication");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AppliedDate).HasColumnName("appliedDate");
+            entity.Property(e => e.Company).HasColumnName("company");
+            entity.Property(e => e.Link).HasColumnName("link");
+            entity.Property(e => e.Position).HasColumnName("position");
+            entity.Property(e => e.Reason).HasColumnName("reason");
+            entity.Property(e => e.Status)
+                .HasDefaultValueSql("'APPLIED'::text")
+                .HasColumnName("status");
         });
 
         modelBuilder.Entity<Post>(entity =>

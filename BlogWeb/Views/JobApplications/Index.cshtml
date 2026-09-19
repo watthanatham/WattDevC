@@ -1,0 +1,138 @@
+@model BlogWeb.Models.JobApplicationIndexViewModel
+@using BlogWeb.Models
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "บันทึกการสมัครงาน";
+    ViewData["MainClass"] = "admin-main-wide";
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+    <div>
+        <h1 class="fw-bold mb-1" style="font-size:1.5rem;">บันทึกการสมัครงาน</h1>
+        <p class="small text-muted mb-0">เก็บว่าสมัครที่ไหนไปบ้าง ตอนนี้ถึงขั้นไหน และเหตุผลของแต่ละที่</p>
+    </div>
+    <button type="button" class="js-job-add btn-pill-dark border-0">+ เพิ่มรายการ</button>
+</div>
+
+@* Quick tally per status — the reason this page exists is to see it at a glance. *@
+<div class="d-flex flex-wrap gap-2 mt-3">
+    @foreach (var s in JobApplicationStatus.All)
+    {
+        var count = Model.Applications.Count(a => a.Status == s.Value);
+        <span class="status-badge" style="background:@(s.Color)1a; color:@s.Color;">@s.Label @count</span>
+    }
+    <span class="status-badge" style="background:#f4f4f5; color:#52525b;">ทั้งหมด @Model.Applications.Count</span>
+</div>
+
+<div class="admin-card p-0 mt-3 overflow-hidden">
+    @if (Model.Applications.Count == 0)
+    {
+        <p class="text-center text-muted py-5 mb-0">ยังไม่มีรายการ — กด "+ เพิ่มรายการ" ได้เลย</p>
+    }
+    else
+    {
+        <div class="p-3 border-bottom" style="border-color:#e4e4e7;">
+            <input type="search" id="jobSearch" class="form-control-admin" placeholder="ค้นหาบริษัท ตำแหน่ง หรือเหตุผล…" autocomplete="off" />
+        </div>
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>บริษัท</th>
+                        <th>ตำแหน่ง</th>
+                        <th>วันที่สมัคร</th>
+                        <th>สถานะ</th>
+                        <th>เหตุผล / บันทึก</th>
+                        <th class="text-end">จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="jobRows">
+                    @foreach (var job in Model.Applications)
+                    {
+                        var display = JobApplicationStatus.Display(job.Status);
+                        <tr data-search="@($"{job.Company} {job.Position} {job.Reason}".ToLowerInvariant())">
+                            <td class="fw-medium">
+                                @if (!string.IsNullOrEmpty(job.Link))
+                                {
+                                    <a href="@job.Link" target="_blank" rel="noopener" class="text-indigo text-decoration-none">@job.Company ↗</a>
+                                }
+                                else
+                                {
+                                    @job.Company
+                                }
+                            </td>
+                            <td>@job.Position</td>
+                            <td class="text-nowrap">@job.AppliedDate.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <span class="status-badge" style="background:@(display.Color)1a; color:@display.Color;">@display.Label</span>
+                            </td>
+                            <td class="text-muted" style="max-width:20rem;">
+                                <span class="d-block text-truncate" title="@job.Reason">@(string.IsNullOrEmpty(job.Reason) ? "—" : job.Reason)</span>
+                            </td>
+                            <td class="text-end text-nowrap">
+                                <button type="button" class="js-job-edit btn btn-link p-0 small fw-medium text-indigo text-decoration-none"
+                                        data-id="@job.Id"
+                                        data-company="@job.Company"
+                                        data-position="@job.Position"
+                                        data-applied="@job.AppliedDate.ToString("yyyy-MM-dd")"
+                                        data-status="@job.Status"
+                                        data-link="@job.Link"
+                                        data-reason="@job.Reason">แก้ไข</button>
+                                <form method="post" action="/admin/jobs/@job.Id/delete" class="js-confirm-form d-inline ms-2" data-confirm='ลบรายการ "@job.Position @@ @job.Company" ใช่หรือไม่?'>
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-link p-0 small fw-medium text-danger text-decoration-none">ลบ</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    <tr id="jobNoMatch" class="d-none">
+                        <td colspan="6" class="text-center text-muted py-4">ไม่พบรายการที่ค้นหา</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@* One modal reused for both add and edit — admin-jobs.js swaps the action and fills the fields. *@
+<div class="modal fade" id="jobModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <form id="jobForm" method="post" action="/admin/jobs">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h5 class="modal-title fw-semibold" id="jobModalTitle" style="font-size:1rem;">เพิ่มการสมัครงาน</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ปิด"></button>
+                </div>
+                <div class="modal-body">
+                    @if (!string.IsNullOrEmpty(Model.Error))
+                    {
+                        <p class="text-danger small">@Model.Error</p>
+                    }
+                    <div class="admin-form-grid">
+                        @await Html.PartialAsync("_JobApplicationFields", Model.Draft)
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-pill-outline" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="submit" class="btn-pill-dark border-0">บันทึก</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Error))
+{
+    @* Validation failed — re-open the modal on the row that was being edited. *@
+    <script>
+        window.JOB_FORM_ERROR = {
+            action: "@(Model.ErrorId.HasValue ? $"/admin/jobs/{Model.ErrorId}" : "/admin/jobs")",
+            title: "@(Model.ErrorId.HasValue ? "แก้ไขการสมัครงาน" : "เพิ่มการสมัครงาน")"
+        };
+    </script>
+}
+
+@section Scripts {
+    <script src="~/js/admin-jobs.js" asp-append-version="true"></script>
+}
