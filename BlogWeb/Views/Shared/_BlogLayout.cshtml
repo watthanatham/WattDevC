@@ -1,4 +1,4 @@
-@{
+﻿@{
     var author = (string)(ViewData["Author"] ?? "Journal");
     var year = DateTime.Now.Year;
 }
@@ -16,7 +16,7 @@
     <!-- Blog has its own minimal chrome, deliberately independent of the home
          page's 8-bit / formal mode toggle — it always renders clean and
          photo-first. Only the light/dark theme choice still applies. -->
-    <script>
+    <script nonce="@Context.Items["csp-nonce"]">
         (function () {
             try {
                 if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');

@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BlogWeb.Data;
 using BlogWeb.Models;
+using BlogWeb.Services;
 
 namespace BlogWeb.Controllers.Admin;
 
@@ -62,15 +63,15 @@ public class PortfolioController : Controller
         profile.Tagline = Optional(form.Tagline);
         profile.Location = Optional(form.Location);
         profile.Email = Optional(form.Email);
-        profile.Github = Optional(form.Github);
-        profile.Linkedin = Optional(form.Linkedin);
+        profile.Github = SafeUrl.Clean(form.Github);
+        profile.Linkedin = SafeUrl.Clean(form.Linkedin);
         profile.PenName = Optional(form.PenName);
         profile.PenBio = Optional(form.PenBio);
 
         // Uploaded in the browser; only overwrite when a new file was uploaded.
-        if (Optional(form.AvatarUrl) is { } avatarUrl) profile.AvatarUrl = avatarUrl;
-        if (Optional(form.ResumeUrl) is { } resumeUrl) profile.ResumeUrl = resumeUrl;
-        if (Optional(form.PenAvatarUrl) is { } penAvatarUrl) profile.PenAvatarUrl = penAvatarUrl;
+        if (SafeUrl.Clean(form.AvatarUrl) is { } avatarUrl) profile.AvatarUrl = avatarUrl;
+        if (SafeUrl.Clean(form.ResumeUrl) is { } resumeUrl) profile.ResumeUrl = resumeUrl;
+        if (SafeUrl.Clean(form.PenAvatarUrl) is { } penAvatarUrl) profile.PenAvatarUrl = penAvatarUrl;
 
         if (isNew) _db.Profiles.Add(profile);
         await _db.SaveChangesAsync();
@@ -87,7 +88,7 @@ public class PortfolioController : Controller
     public async Task<IActionResult> AddSkill(SkillFormViewModel form)
     {
         var name = (form.Name ?? "").Trim();
-        var iconUrl = (form.IconUrl ?? "").Trim();
+        var iconUrl = SafeUrl.Clean(form.IconUrl) ?? "";
 
         if (name.Length == 0 || iconUrl.Length == 0)
         {
@@ -108,9 +109,9 @@ public class PortfolioController : Controller
     public async Task<IActionResult> UpdateSkillIcon(int id, string iconUrl)
     {
         var skill = await _db.Skills.FindAsync(id);
-        if (skill != null && !string.IsNullOrWhiteSpace(iconUrl))
+        if (skill != null && SafeUrl.Clean(iconUrl) is { } safeIcon)
         {
-            skill.IconUrl = iconUrl.Trim();
+            skill.IconUrl = safeIcon;
             await _db.SaveChangesAsync();
         }
         return Redirect("/admin/portfolio#skills");
@@ -152,8 +153,8 @@ public class PortfolioController : Controller
         {
             Title = title,
             Description = description,
-            Link = Optional(form.Link),
-            ImageUrl = Optional(form.ImageUrl),
+            Link = SafeUrl.Clean(form.Link),
+            ImageUrl = SafeUrl.Clean(form.ImageUrl),
             Problem = Optional(form.Problem),
             Solution = Optional(form.Solution),
             Result = Optional(form.Result),

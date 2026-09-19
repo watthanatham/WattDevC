@@ -1,4 +1,4 @@
-@model BlogWeb.Models.PostFormViewModel
+﻿@model BlogWeb.Models.PostFormViewModel
 @using BlogWeb.Services
 @{
     Layout = "_AdminLayout";
@@ -55,7 +55,7 @@
 
     <div>
         <label class="form-label-admin">เนื้อหา</label>
-        <textarea name="Body" class="js-post-editor" style="display:none;">@Html.Raw(Model.Body)</textarea>
+        <textarea name="Body" class="js-post-editor" style="display:none;">@Model.Body</textarea>
     </div>
 
     @if (!string.IsNullOrEmpty(Model.Error))

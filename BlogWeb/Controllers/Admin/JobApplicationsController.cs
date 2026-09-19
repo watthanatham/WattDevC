@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BlogWeb.Data;
 using BlogWeb.Models;
+using BlogWeb.Services;
 
 namespace BlogWeb.Controllers.Admin;
 
@@ -94,7 +95,7 @@ public class JobApplicationsController : Controller
             Position = position,
             AppliedDate = appliedDate,
             Status = status,
-            Link = Optional(form.Link),
+            Link = SafeUrl.Clean(form.Link),
             Reason = Optional(form.Reason),
         };
 

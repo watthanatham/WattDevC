@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -52,12 +52,12 @@ public class PostsController : Controller
         {
             Title = vm.Title,
             Slug = slug,
-            Body = body,
+            Body = PostHtmlSanitizer.Sanitize(body),
             Category = vm.Category ?? "Street",
             Excerpt = excerpt.Length > 0 ? excerpt : null,
             Tags = ParseTags(vm.Tags),
             Published = vm.Published,
-            CoverImage = coverImage.Length > 0 ? coverImage : null,
+            CoverImage = SafeUrl.Clean(coverImage),
         });
         await _db.SaveChangesAsync();
 
@@ -109,11 +109,11 @@ public class PostsController : Controller
 
         // Browser-uploaded cover URL; falls back to the existing one if unchanged.
         var coverImage = (vm.CoverImage ?? "").Trim();
-        existing.CoverImage = coverImage.Length > 0 ? coverImage : existing.CoverImage;
+        existing.CoverImage = SafeUrl.Clean(coverImage) ?? existing.CoverImage;
 
         existing.Slug = vm.Title == existing.Title ? existing.Slug : await UniqueSlugAsync(vm.Title, id);
         existing.Title = vm.Title;
-        existing.Body = body;
+        existing.Body = PostHtmlSanitizer.Sanitize(body);
         existing.Category = vm.Category ?? "Street";
         existing.Excerpt = excerpt.Length > 0 ? excerpt : null;
         existing.Tags = ParseTags(vm.Tags);

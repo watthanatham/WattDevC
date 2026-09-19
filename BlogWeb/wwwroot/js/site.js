@@ -1,104 +1,77 @@
-// Theme (light/dark) + site mode (formal/game) toggles.
-// Ported from src/lib/use-mode.ts + theme-toggle.tsx + mode-toggle.tsx —
-// same localStorage keys ('theme', 'mode') so a visitor's choice on either
-// app carries over if they ever load both against the same browser.
-$(function () {
-  var $html = $(document.documentElement);
-  var $overlay = $("#modeTransitionOverlay");
-  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// The portfolio has one presentation; only the light/dark preference persists.
+document.addEventListener("DOMContentLoaded", function () {
+  var root = document.documentElement;
+  var themeButton = document.querySelector(".js-theme-toggle");
+  var menuButton = document.querySelector(".js-nav-toggle");
+  var menu = document.querySelector("#homeMobileNav");
 
-  // Brief flash so the theme/mode swap (an instant class toggle) reads as a
-  // deliberate transition instead of an abrupt flicker.
-  function withFlash(apply) {
-    if (reduceMotion || !$overlay.length) {
-      apply();
-      return;
+  function renderTheme() {
+    var dark = root.classList.contains("dark");
+    themeButton.setAttribute("aria-pressed", String(dark));
+    themeButton.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+  }
+
+  if (themeButton) {
+    renderTheme();
+    themeButton.addEventListener("click", function () {
+      var dark = root.classList.toggle("dark");
+      try { localStorage.setItem("theme", dark ? "dark" : "light"); } catch (e) {}
+      renderTheme();
+    });
+  }
+
+  // Hero cursor light: fine pointers only, off under reduced motion.
+  var hero = document.querySelector("[data-spotlight]");
+  if (hero && window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) {
+    hero.addEventListener("pointermove", function (event) {
+      var box = hero.getBoundingClientRect();
+      hero.style.setProperty("--mx", event.clientX - box.left + "px");
+      hero.style.setProperty("--my", event.clientY - box.top + "px");
+      hero.classList.add("is-lit");
+    });
+    hero.addEventListener("pointerleave", function () { hero.classList.remove("is-lit"); });
+  }
+
+  // Scroll reveal: .reveal elements fade up once as they enter the viewport.
+  // Elements arriving in the same frame (a row of cards) stagger by 90ms.
+  // _Layout's head script sets .js-reveal; without it everything stays visible.
+  if (root.classList.contains("js-reveal")) {
+    var observer = new IntersectionObserver(function (entries) {
+      var batch = 0;
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        observer.unobserve(el);
+        el.style.setProperty("--d", Math.min(batch++ * 90, 450) + "ms");
+        el.classList.add("is-in");
+        el.addEventListener("transitionend", function done(event) {
+          if (event.target !== el || event.propertyName !== "opacity") return;
+          el.removeEventListener("transitionend", done);
+          el.classList.add("is-done");
+          el.style.removeProperty("--d");
+        });
+      });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    document.querySelectorAll(".reveal").forEach(function (el) { observer.observe(el); });
+  }
+
+  if (menuButton && menu) {
+    function closeMenu() {
+      menu.classList.add("d-none");
+      menuButton.setAttribute("aria-expanded", "false");
     }
-    $overlay.addClass("is-active");
-    setTimeout(function () {
-      apply();
-      setTimeout(function () { $overlay.removeClass("is-active"); }, 150);
-    }, 150);
-  }
-
-  function isDark() {
-    return $html.hasClass("dark");
-  }
-
-  function isGame() {
-    return $html.attr("data-mode") === "game";
-  }
-
-  function renderToggles() {
-    var dark = isDark();
-    var game = isGame();
-
-    $(".js-theme-toggle").each(function () {
-      $(this).find(".js-theme-icon").text(dark ? "☾" : "☀");
-      $(this).attr("title", dark ? "Light mode" : "Dark mode");
+    menuButton.addEventListener("click", function () {
+      var hidden = menu.classList.toggle("d-none");
+      menuButton.setAttribute("aria-expanded", String(!hidden));
     });
-
-    $(".js-mode-toggle").each(function () {
-      $(this).text(game ? "💼 FORMAL MODE" : "🕹️ INSERT COIN");
-      $(this)
-        .toggleClass("pixel-btn bg-xp", game)
-        .toggleClass("mode-btn-formal", !game);
+    menu.addEventListener("click", function (event) {
+      if (event.target.closest("a")) closeMenu();
     });
-  }
-
-  $(document).on("click", ".js-theme-toggle", function () {
-    withFlash(function () {
-      var next = !isDark();
-      $html.toggleClass("dark", next);
-      try {
-        localStorage.setItem("theme", next ? "dark" : "light");
-      } catch (e) {}
-      renderToggles();
-    });
-  });
-
-  $(document).on("click", ".js-mode-toggle", function () {
-    withFlash(function () {
-      var next = isGame() ? "formal" : "game";
-      if (next === "game") {
-        $html.attr("data-mode", "game");
-      } else {
-        $html.removeAttr("data-mode");
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !menu.classList.contains("d-none")) {
+        closeMenu();
+        menuButton.focus();
       }
-      try {
-        localStorage.setItem("mode", next);
-      } catch (e) {}
-      renderToggles();
     });
-  });
-
-  $(document).on("click", ".js-nav-toggle", function () {
-    $($(this).data("target")).toggleClass("d-none");
-  });
-
-  renderToggles();
+  }
 });
-
-// Scroll reveal for Home (formal mode) — fades/slides sections in as they
-// enter the viewport. Game mode has no .reveal elements, so this is a no-op there.
-(function () {
-  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var els = document.querySelectorAll(".reveal");
-  if (!els.length) return;
-
-  if (reduceMotion || !("IntersectionObserver" in window)) {
-    els.forEach(function (el) { el.classList.add("is-visible"); });
-    return;
-  }
-
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-
-  els.forEach(function (el) { observer.observe(el); });
-})();

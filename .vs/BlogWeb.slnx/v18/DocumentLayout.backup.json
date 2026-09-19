@@ -3,6 +3,13 @@
   "WorkspaceRootPath": "F:\\Source code\\Personal web\\WattDevC\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|f:\\source code\\personal web\\wattdevc\\blogweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|solutionrelative:blogweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|f:\\source code\\personal web\\wattdevc\\blogweb\\models\\jobapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|solutionrelative:blogweb\\models\\jobapplication.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -39,10 +46,6 @@
       "RelativeMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|solutionrelative:blogweb\\views\\shared\\_bloglayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|f:\\source code\\personal web\\wattdevc\\blogweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|solutionrelative:blogweb\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|f:\\source code\\personal web\\wattdevc\\blogweb\\views\\shared\\_footer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{930271EC-2F4A-4707-8AEB-A1C8DF27CBBF}|BlogWeb\\BlogWeb.csproj|solutionrelative:blogweb\\views\\shared\\_footer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -61,24 +64,23 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "JobApplication.cs",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Models\\JobApplication.cs",
               "RelativeDocumentMoniker": "BlogWeb\\Models\\JobApplication.cs",
               "ToolTip": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Models\\JobApplication.cs",
               "RelativeToolTip": "BlogWeb\\Models\\JobApplication.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAA5wB8AAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAgwB8AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-19T10:07:01.71Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T10:07:01.71Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "_JobApplicationFields.cshtml",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Shared\\_JobApplicationFields.cshtml",
               "RelativeDocumentMoniker": "BlogWeb\\Views\\Shared\\_JobApplicationFields.cshtml",
@@ -86,12 +88,11 @@
               "RelativeToolTip": "BlogWeb\\Views\\Shared\\_JobApplicationFields.cshtml",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAB0AAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-19T10:06:57.811Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T10:06:57.811Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Index.cshtml",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Dashboard\\Index.cshtml",
               "RelativeDocumentMoniker": "BlogWeb\\Views\\Dashboard\\Index.cshtml",
@@ -99,12 +100,11 @@
               "RelativeToolTip": "BlogWeb\\Views\\Dashboard\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-19T10:06:49.675Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T10:06:49.675Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "Index.cshtml",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\JobApplications\\Index.cshtml",
               "RelativeDocumentMoniker": "BlogWeb\\Views\\JobApplications\\Index.cshtml",
@@ -112,12 +112,11 @@
               "RelativeToolTip": "BlogWeb\\Views\\JobApplications\\Index.cshtml",
               "ViewState": "AgIAABYAAAAAAAAAAAAAACsAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-19T10:06:07.83Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T10:06:07.83Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "appsettings.Local.json",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\appsettings.Local.json",
               "RelativeDocumentMoniker": "BlogWeb\\appsettings.Local.json",
@@ -125,12 +124,11 @@
               "RelativeToolTip": "BlogWeb\\appsettings.Local.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAABmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-09-19T09:53:18.029Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T09:53:18.029Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "BlogWeb\\Views\\Shared\\_Layout.cshtml",
@@ -138,12 +136,11 @@
               "RelativeToolTip": "BlogWeb\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-18T14:37:35.636Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-18T14:37:35.636Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "Detail.cshtml",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Blog\\Detail.cshtml",
               "RelativeDocumentMoniker": "BlogWeb\\Views\\Blog\\Detail.cshtml",
@@ -155,7 +152,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "_BlogLayout.cshtml",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Shared\\_BlogLayout.cshtml",
               "RelativeDocumentMoniker": "BlogWeb\\Views\\Shared\\_BlogLayout.cshtml",
@@ -167,7 +164,31 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "BlogWeb\\Views\\Home\\Index.cshtml",
+              "ToolTip": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "BlogWeb\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAUwF8AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-18T12:17:35.52Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Microsoft.Common.CurrentVersion.targets",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\MSBuild\\Current\\Bin\\amd64\\Microsoft.Common.CurrentVersion.targets",
+              "ViewState": "AgIAAHoVAAAAAAAAAAArwI4VAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2026-09-19T12:08:17.953Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "_Navbar.cshtml",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Shared\\_Navbar.cshtml",
               "RelativeDocumentMoniker": "BlogWeb\\Views\\Shared\\_Navbar.cshtml",
@@ -175,12 +196,11 @@
               "RelativeToolTip": "BlogWeb\\Views\\Shared\\_Navbar.cshtml",
               "ViewState": "AgIAACoAAAAAAAAAAAAAABgAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-18T13:03:33.977Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-18T13:03:33.977Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "appsettings.Local.json",
               "DocumentMoniker": "F:\\Source code\\Web Blog C#\\aspnet\\BlogWeb\\appsettings.Local.json",
               "RelativeDocumentMoniker": "..\\..\\Web Blog C#\\aspnet\\BlogWeb\\appsettings.Local.json",
@@ -192,7 +212,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "_Footer.cshtml",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Shared\\_Footer.cshtml",
               "RelativeDocumentMoniker": "BlogWeb\\Views\\Shared\\_Footer.cshtml",
@@ -204,19 +224,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "BlogWeb\\Views\\Home\\Index.cshtml",
-              "ToolTip": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "BlogWeb\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAUwEMAAACFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-18T12:17:35.52Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "HomeController.cs",
               "DocumentMoniker": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "BlogWeb\\Controllers\\HomeController.cs",

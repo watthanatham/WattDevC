@@ -1,4 +1,4 @@
-// Uploads a file straight from the browser to Supabase Storage and resolves
+﻿// Uploads a file straight from the browser to Supabase Storage and resolves
 // with its public URL — ported from src/lib/upload-client.ts. Bypassing our
 // own server avoids ever needing a large-file upload endpoint.
 //
@@ -20,8 +20,21 @@
     ? client.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
     : Promise.resolve();
 
+  var ALLOWED_EXT = /^(png|jpe?g|gif|webp|svg|pdf)$/;
+  var MAX_BYTES = 10 * 1024 * 1024;
+
   window.uploadToStorage = function (file, folder) {
-    var ext = (file.name.split(".").pop() || "bin").toLowerCase();
+    // Strip everything but [a-z0-9] — "evil.png/../../x" would otherwise put
+    // slashes into the object path. The bucket's own mime/size limits are the
+    // real gate; these checks just fail fast with a readable message.
+    var ext = (file.name.split(".").pop() || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (!ALLOWED_EXT.test(ext)) {
+      return Promise.reject(new Error("อัปโหลดได้เฉพาะรูปภาพ (png/jpg/gif/webp/svg) หรือ PDF"));
+    }
+    if (file.size > MAX_BYTES) {
+      return Promise.reject(new Error("ไฟล์ใหญ่เกิน 10MB"));
+    }
+
     var path = folder + "/" + Date.now() + "-" + Math.random().toString(36).slice(2) + "." + ext;
 
     return sessionReady.then(function () {

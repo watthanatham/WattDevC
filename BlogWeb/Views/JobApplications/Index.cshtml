@@ -1,4 +1,4 @@
-@model BlogWeb.Models.JobApplicationIndexViewModel
+﻿@model BlogWeb.Models.JobApplicationIndexViewModel
 @using BlogWeb.Models
 @{
     Layout = "_AdminLayout";
@@ -125,7 +125,7 @@
 @if (!string.IsNullOrEmpty(Model.Error))
 {
     @* Validation failed — re-open the modal on the row that was being edited. *@
-    <script>
+    <script nonce="@Context.Items["csp-nonce"]">
         window.JOB_FORM_ERROR = {
             action: "@(Model.ErrorId.HasValue ? $"/admin/jobs/{Model.ErrorId}" : "/admin/jobs")",
             title: "@(Model.ErrorId.HasValue ? "แก้ไขการสมัครงาน" : "เพิ่มการสมัครงาน")"

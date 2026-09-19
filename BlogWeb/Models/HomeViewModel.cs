@@ -7,7 +7,6 @@ public class HomeViewModel
     public List<Skill> Skills { get; set; } = new();
     public List<Project> Projects { get; set; } = new();
     public List<Experience> Experiences { get; set; } = new();
-    public List<Project> CaseStudies { get; set; } = new();
     public List<Post> LatestPosts { get; set; } = new();
     public int Years { get; set; }
 }

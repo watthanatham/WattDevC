@@ -35,11 +35,6 @@ public class HomeController : Controller
             Experiences = experiences,
             LatestPosts = latestPosts,
             Years = CalcYears(experiences),
-            // A project renders as a case study / "Boss Battle" only when the full
-            // problem → solution → result story is filled in.
-            CaseStudies = projects
-                .Where(p => !string.IsNullOrEmpty(p.Problem) && !string.IsNullOrEmpty(p.Solution) && !string.IsNullOrEmpty(p.Result))
-                .ToList(),
         };
 
         return View(vm);
