@@ -71,7 +71,7 @@
               "RelativeDocumentMoniker": "BlogWeb\\Models\\JobApplication.cs",
               "ToolTip": "F:\\Source code\\Personal web\\WattDevC\\BlogWeb\\Models\\JobApplication.cs",
               "RelativeToolTip": "BlogWeb\\Models\\JobApplication.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAA5wB8AAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAgwB8AAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-19T10:07:01.71Z",
               "EditorCaption": ""
@@ -86,8 +86,7 @@
               "RelativeToolTip": "BlogWeb\\Views\\Shared\\_JobApplicationFields.cshtml",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAB0AAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-19T10:06:57.811Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T10:06:57.811Z"
             },
             {
               "$type": "Document",
@@ -99,8 +98,7 @@
               "RelativeToolTip": "BlogWeb\\Views\\Dashboard\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-19T10:06:49.675Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T10:06:49.675Z"
             },
             {
               "$type": "Document",
@@ -112,8 +110,7 @@
               "RelativeToolTip": "BlogWeb\\Views\\JobApplications\\Index.cshtml",
               "ViewState": "AgIAABYAAAAAAAAAAAAAACsAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-19T10:06:07.83Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T10:06:07.83Z"
             },
             {
               "$type": "Document",
@@ -125,8 +122,7 @@
               "RelativeToolTip": "BlogWeb\\appsettings.Local.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAABmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-09-19T09:53:18.029Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T09:53:18.029Z"
             },
             {
               "$type": "Document",
@@ -138,8 +134,7 @@
               "RelativeToolTip": "BlogWeb\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-18T14:37:35.636Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-18T14:37:35.636Z"
             },
             {
               "$type": "Document",
@@ -175,8 +170,7 @@
               "RelativeToolTip": "BlogWeb\\Views\\Shared\\_Navbar.cshtml",
               "ViewState": "AgIAACoAAAAAAAAAAAAAABgAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-18T13:03:33.977Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-18T13:03:33.977Z"
             },
             {
               "$type": "Document",
